@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.BoundingShape;
@@ -24,22 +25,23 @@ import static com.cloudHopper.EntityType.*;
 
 public class GameEntityFactory implements EntityFactory {
 
-//    @Spawns("backgroundZ1")
-//    public Entity newBackgroundZ1(SpawnData data) {
-//        return entityBuilder()
-//                .view(new ScrollingBackgroundView(image("bgCloud.png"), getAppWidth(), geti("maxY"),
-//                        Orientation.HORIZONTAL,
-//                        1.11))
-//                .zIndex(-1)
-//                .with(new IrremovableComponent())
-//                .buildAndAttach();
-//    }
+    @Spawns("backgroundZ1")
+    public Entity newBackgroundZ1(SpawnData data) {
+        return entityBuilder()
+                .view(new ScrollingBackgroundView(image("z-1.png"), getAppWidth(), geti("maxY"),
+                        Orientation.HORIZONTAL,
+                        (geti("playerMovementSpeed")*.00022)+1))
+                .zIndex(-1)
+                .with(new IrremovableComponent())
+                .buildAndAttach();
+    }
 
     @Spawns("backgroundZ2")
     public Entity newBackgroundZ2(SpawnData data) {
         return entityBuilder()
-                .view(new ScrollingBackgroundView(image("bgPyramid.png"), getAppWidth(), geti("maxY"), Orientation.HORIZONTAL,
-                        1.08))
+                .view(new ScrollingBackgroundView(image("z-2.png"), getAppWidth(), geti("maxY"),
+                        Orientation.HORIZONTAL,
+                        (geti("playerMovementSpeed")*.00019)+1))
                 .zIndex(-2)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
@@ -48,8 +50,9 @@ public class GameEntityFactory implements EntityFactory {
     @Spawns("backgroundZ3")
     public Entity newBackgroundZ3(SpawnData data) {
         return entityBuilder()
-                .view(new ScrollingBackgroundView(image("bgTower.png"), getAppWidth(), geti("maxY"), Orientation.HORIZONTAL,
-                        1.05))
+                .view(new ScrollingBackgroundView(image("z-3.png"), getAppWidth(), geti("maxY"),
+                        Orientation.HORIZONTAL,
+                        (geti("playerMovementSpeed")*.00016)+1))
                 .zIndex(-3)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
@@ -58,49 +61,63 @@ public class GameEntityFactory implements EntityFactory {
     @Spawns("backgroundZ4")
     public Entity newBackgroundZ4(SpawnData data) {
         return entityBuilder()
-                .view(new ScrollingBackgroundView(image("BG.png"), getAppWidth(), geti("maxY"), Orientation.HORIZONTAL,
-                        1.02))
+                .view(new ScrollingBackgroundView(image("z-4.png"), getAppWidth(), geti("maxY"),
+                        Orientation.HORIZONTAL,
+                        (geti("playerMovementSpeed")*.00013)+1))
                 .zIndex(-4)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
     }
 
-//    @Spawns("backgroundZ5")
-//    public Entity newBackgroundZ5(SpawnData data) {
-//        return entityBuilder()
-//                .view(new ScrollingBackgroundView(image("bgMountains.png"), getAppWidth(), geti("maxY"), Orientation.HORIZONTAL,
-//                        1.02))
-//                .zIndex(-5)
-//                .with(new IrremovableComponent())
-//                .buildAndAttach();
-//    }
+    @Spawns("backgroundZ5")
+    public Entity newBackgroundZ5(SpawnData data) {
+        return entityBuilder()
+                .view(new ScrollingBackgroundView(image("z-5.png"), getAppWidth(), geti("maxY"),
+                        Orientation.HORIZONTAL,
+                        (geti("playerMovementSpeed")*.00011)+1))
+                .zIndex(-5)
+                .with(new IrremovableComponent())
+                .buildAndAttach();
+    }
 
-    //  for auto-scrolling background
-//    @Spawns("clouds")
-//    public Entity newClouds(SpawnData data) {
-//        return entityBuilder()
-//                .view(new SelfScrollingBackgroundView(image("bgClouds"), 2560, geti("maxY"), Orientation.HORIZONTAL,
-//                        10))
-//                .zIndex(-1)
-//                .buildAndAttach();
-//    }
+    @Spawns("backgroundZ6")
+    public Entity newBackgroundZ6(SpawnData data) {
+        return entityBuilder()
+                .view(new ScrollingBackgroundView(image("z-6.png"), getAppWidth(), geti("maxY"),
+                        Orientation.HORIZONTAL,
+                        (geti("playerMovementSpeed")*.00009)+1))
+                .zIndex(-6)
+                .with(new IrremovableComponent())
+                .buildAndAttach();
+    }
 
-//    @Spawns("cloud")
-//    public Entity newCloud(SpawnData data) {
-//        return entityBuilder(data)
-//                .type(CLOUD)
-//                .view("cloud.png")
-//                .at(20, 64)
-//                .zIndex(1)
-//                .with(new CloudControl())
-//                .build();
-//    }
+    @Spawns("backgroundZ7")
+    public Entity newBackgroundZ7(SpawnData data) {
+        return entityBuilder()
+                .view(new ScrollingBackgroundView(image("z-7.png"), getAppWidth(), geti("maxY"),
+                        Orientation.HORIZONTAL,
+                        (geti("playerMovementSpeed")*.00007)+1))
+                .zIndex(-7)
+                .with(new IrremovableComponent())
+                .buildAndAttach();
+    }
+
+    @Spawns("backgroundZ8")
+    public Entity newBackgroundZ8(SpawnData data) {
+        return entityBuilder()
+                .view(new ScrollingBackgroundView(image("z-8.png"), getAppWidth(), geti("maxY"),
+                        Orientation.HORIZONTAL,
+                        (geti("playerMovementSpeed")*.00006)+1))
+                .zIndex(-8)
+                .with(new IrremovableComponent())
+                .buildAndAttach();
+    }
 
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
-        physics.setFixtureDef(new FixtureDef().friction(3f));
+        physics.setFixtureDef(new FixtureDef().friction(4.0f));
 
         return entityBuilder(data)
                 .type(PLAYER)
@@ -133,15 +150,15 @@ public class GameEntityFactory implements EntityFactory {
                 .bbox(new HitBox(BoundingShape.box(48, 48)))
                 .with(new PhysicsComponent())
                 .with(new StateComponent())
-                .collidable()
+                .with(new CollidableComponent(true))
                 .with(new EnemyAIComponent())
                 .build();
     }
 
     @Spawns("ground")
     public Entity newGround(SpawnData data) {
-        PhysicsComponent physics = new PhysicsComponent();
-        physics.setFixtureDef(new FixtureDef().friction(3f));
+//        PhysicsComponent physics = new PhysicsComponent();
+//        physics.setFixtureDef(new FixtureDef().friction(9.0f));
 
         return entityBuilder(data)
                 .type(GROUND)
@@ -154,7 +171,7 @@ public class GameEntityFactory implements EntityFactory {
     @Spawns("wall")
     public Entity newWall(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
-        physics.setFixtureDef(new FixtureDef().friction(0f));
+        physics.setFixtureDef(new FixtureDef().friction(0.0f));
 
         return entityBuilder(data)
                 .type(WALL)
@@ -171,7 +188,7 @@ public class GameEntityFactory implements EntityFactory {
                 .viewWithBBox("floatingPlatform.png")
                 .at(data.getX(), data.getY())
                 .with(new StateComponent())
-                .with(new PlatformControl())
+                .with(new RevealedPlatformControl())
                 .with(new PhysicsComponent())
                 .collidable()
                 .build();
@@ -197,14 +214,14 @@ public class GameEntityFactory implements EntityFactory {
     @Spawns("block")
     public Entity newBlock(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
-        physics.setFixtureDef(new FixtureDef().density(20f));
-//        physics.setFixtureDef(new FixtureDef().friction(3f));
+        physics.setFixtureDef(new FixtureDef().density(15f));
         physics.setBodyType(BodyType.DYNAMIC);
 
         return entityBuilder(data)
                 .type(BLOCK)
                 .viewWithBBox("StoneBlock.png")
                 .with(physics)
+                .with(new BlockControl())
                 .collidable()
                 .build();
     }
@@ -260,6 +277,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder(data)
                 .type(CRATE)
                 .viewWithBBox("crate.png")
+                .with(new CrateControl())
                 .collidable()
                 .build();
     }

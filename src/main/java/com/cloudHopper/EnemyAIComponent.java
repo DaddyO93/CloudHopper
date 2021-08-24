@@ -1,6 +1,7 @@
 package com.cloudHopper;
 
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.entity.state.EntityState;
@@ -50,7 +51,7 @@ public class EnemyAIComponent extends Component {
         jumpTimer.capture();
         entity.getViewComponent().addChild(texture);
         physics.setBodyType(BodyType.DYNAMIC);
-        entity.getComponent(CollidableComponent.class).addIgnoredType(com.cloudHopper.EntityType.ENEMY);
+        entity.getComponent(CollidableComponent.class).addIgnoredType(EntityType.ENEMY);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class EnemyAIComponent extends Component {
         player = getGameWorld().getSingleton(com.cloudHopper.EntityType.PLAYER);
 
         if (entity.distance(player) < getAppWidth()/2 && !getb("enemyDialogue"))  {
-            getDialogService().showMessageBox("Watch out! Press W to throw a rock!");
+            getDialogService().showMessageBox("Watch out for that! Press W to throw a rock!");
             set("enemyDialogue", true);
         }
 
@@ -153,7 +154,18 @@ public class EnemyAIComponent extends Component {
                 set("enemyDirection", "right");
             }
         }
+    }
 
+    public void blockOnHead(Entity enemy, Entity block) {
+        if (block.getY()+60 < enemy.getY()) {
+            killEnemy(enemy);
+        }
+    }
+
+    public void killEnemy(Entity enemy) {
+        enemy.removeFromWorld();
+        spawn("scoreText", new SpawnData(enemy.getX(), enemy.getY()).put("text", "+200 Points!"));
+        inc("score", +200);
     }
 
 //    private void edgeDetection() {

@@ -10,7 +10,7 @@ import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
-public class PlatformControl extends Component {
+public class RevealedPlatformControl extends Component {
     private StateComponent state;
     private LocalTimer cloudTimer;
 

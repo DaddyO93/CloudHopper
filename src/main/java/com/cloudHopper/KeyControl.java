@@ -1,5 +1,6 @@
 package com.cloudHopper;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
@@ -7,7 +8,7 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class KeyControl extends Component {
     private AnimatedTexture texture;
@@ -30,4 +31,18 @@ public class KeyControl extends Component {
 
     @Override
     public void onAdded() { entity.getViewComponent().addChild(texture);}
+
+    private void message() {
+        getDialogService().showMessageBox("Use keys to unlock crates to release clouds.");
+        set("keyDialogue", true);
+    }
+
+    public void spawnDisappearingKey(Entity key) {
+        if (!getb("keyDialogue")) {
+            message();
+        }
+        spawn("keyDisappearAnimation", key.getX(), key.getY());
+        inc("keys", 1);
+        key.removeFromWorld();
+    }
 }

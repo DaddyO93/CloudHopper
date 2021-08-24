@@ -21,4 +21,9 @@ public class StoneControl extends Component {
     public void onUpdate(double tpf) {
         physics.setVelocityX(stoneMovementSpeed);
     }
+
+    public void hitEnemy(Entity stone, Entity enemy) {
+        stone.removeFromWorld();
+        enemy.getComponent(EnemyAIComponent.class).killEnemy(enemy);
+    }
 }

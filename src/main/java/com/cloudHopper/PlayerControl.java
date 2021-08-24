@@ -55,7 +55,6 @@ public class PlayerControl extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-
         if (physics.isMoving()) {
             if (texture.getAnimationChannel() != animationWalk) {
                 texture.loopAnimationChannel(animationWalk);
@@ -90,31 +89,9 @@ public class PlayerControl extends Component {
         }
     }
 
-    public void jump() {
+    public void jumpTest() {
         if (!physics.isMovingY()){
             jump(jumpDistance);
-        }
-    }
-
-    public void attack(Entity player) {
-        spawn("stone", player.getX()+35, player.getY());
-    }
-
-    private void restart(Entity player) {
-        player.getComponent(PhysicsComponent.class).overwritePosition(startPosition);
-    }
-
-    public void invulnerabilityTest(Entity player, Entity enemy) {
-        System.out.println("Invulnerable: " + getb("invulnerable"));
-        if (!getb("invulnerable")) {
-            invulnerability = newLocalTimer();
-            invulnerability.capture();
-            set("invulnerable", true);
-            knockBack(player, enemy);
-        } else {
-            if (invulnerability.elapsed(Duration.seconds(4))) {
-                set("invulnerable", false);
-            }
         }
     }
 
@@ -122,16 +99,51 @@ public class PlayerControl extends Component {
         physics.setVelocityY(-distance);
     }
 
-    private void move(int distance) {
+    public void attack(Entity player) {
+        spawn("stone", player.getX()+35, player.getY());
+    }
+
+    public void move(int distance) {
         physics.setVelocityX(distance);
     }
 
-    private void knockBack(Entity player, Entity enemy) {
-        int knockbackDirection = 1;
-        if (player.getX() < enemy.getX()) {
-            knockbackDirection = -1;
+
+
+    public void wallTest(Entity player, Entity wall) {
+        int facing = 1;
+        if (player.getX() > wall.getX()) {
+            facing = -1;
         }
-        move(400 * knockbackDirection);
+        move(20 * facing);
+    }
+
+    public void livesTest() {
+        if (geti("lives")>1) {
+            inc("lives", -1);
+        } else {
+            new PlatformerApp().gameOverDialogue();
+        }
+    }
+
+    private void restart(Entity player) {
+        player.getComponent(PhysicsComponent.class).overwritePosition(startPosition);
+    }
+
+    public void invulnerabilityTest(Entity player) {
+        if (!getb("invulnerable")) {
+            invulnerability = newLocalTimer();
+            invulnerability.capture();
+            set("invulnerable", true);
+        } else {
+            if (invulnerability.elapsed(Duration.seconds(4))) {
+                set("invulnerable", false);
+            }
+        }
+        knockBack(player);
+    }
+
+    private void knockBack(Entity player) {
+        move(400 * (int) (player.getScaleX()*-1));
         jump(600);
     }
 }

@@ -4,9 +4,7 @@ import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
-import com.almasb.fxgl.core.collection.PropertyMap;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -33,14 +31,6 @@ public class PlatformerApp extends GameApplication {
     }
 
     @Override
-    protected void initInput() {
-        onKey(KeyCode.A, () -> player.getComponent(PlayerControl.class).left(player));
-        onKey(KeyCode.D, () -> player.getComponent(PlayerControl.class).right(player));
-        onKeyDown(KeyCode.SPACE, () -> player.getComponent(PlayerControl.class).jump());
-        onKeyDown(KeyCode.W, () -> player.getComponent(PlayerControl.class).attack(player));
-    }
-
-    @Override
     protected void initGameVars(Map<String, Object> vars) {
         super.initGameVars(vars);
         vars.put("score", 0);
@@ -62,9 +52,18 @@ public class PlatformerApp extends GameApplication {
     }
 
     @Override
+    protected void initInput() {
+        onKey(KeyCode.A, () -> player.getComponent(PlayerControl.class).left(player));
+        onKey(KeyCode.D, () -> player.getComponent(PlayerControl.class).right(player));
+        onKeyDown(KeyCode.SPACE, () -> player.getComponent(PlayerControl.class).jumpTest());
+        onKeyDown(KeyCode.W, () -> player.getComponent(PlayerControl.class).attack(player));
+//        onKeyDown(KeyCode.S, () -> player.getComponent(PlayerControl.class).squat());
+    }
+
+    @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new GameEntityFactory());
-        getGameScene().setBackgroundColor(Color.BLACK);
+        getGameScene().setBackgroundColor(Color.ANTIQUEWHITE);
         setLevelFromMap("level1.tmx");
 
         player = spawn("player", startPosition);
@@ -79,23 +78,52 @@ public class PlatformerApp extends GameApplication {
         viewport.bindToEntity(player, getAppWidth()/2, getAppHeight()/2);
         viewport.setLazy(true);
 
-//        spawn("backgroundZ1");
-        spawn("backgroundZ2");
-        spawn("backgroundZ3");
+        spawn("backgroundZ8");
+        spawn("backgroundZ7");
+//        spawn("backgroundZ6");
+        spawn("backgroundZ5");
         spawn("backgroundZ4");
-//        spawn("clouds");
+        spawn("backgroundZ3");
+//        spawn("backgroundZ2");
+        spawn("backgroundZ1");
+
     }
 
     @Override
     protected void initPhysics() {
         getPhysicsWorld().setGravity(0, 1100);
 
+        onCollisionBegin(EntityType.ENEMY, EntityType.PLAYER, (enemy, player) -> {
+            playerLivesTest();
+            player.getComponent(PlayerControl.class).invulnerabilityTest(player);
+        });
+        onCollisionBegin(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
+            enemy.getComponent(EnemyAIComponent.class).directionChange();
+        });
+        onCollisionBegin(EntityType.ENEMY, EntityType.BLOCK, (enemy, block) -> {
+            enemy.getComponent(EnemyAIComponent.class).blockOnHead(enemy, block);
+        });
+
         onCollisionBegin(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
-            if (!getb("blockDialogue")){
-                getDialogService().showMessageBox("Push blocks to help you get where you need.");
-                set("blockDialogue", true);
+            block.getComponent(BlockControl.class).message();
+        });
+        onCollisionBegin(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
+            player.getComponent(PlayerControl.class).wallTest(player, wall);
+        });
+        onCollisionBegin(EntityType.PLAYER, EntityType.KEY, (player, key) -> {
+            key.getComponent(KeyControl.class).spawnDisappearingKey(key);
+        });
+        onCollisionBegin(EntityType.PLAYER, EntityType.CRATE, (player, crate) -> {
+            if (geti("keys") > 0) {
+                crate.getComponent(CrateControl.class).spawnCloud(crate);
             }
         });
+
+//        onCollisionBegin(EntityType.PLAYER, EntityType.COIN, (player, coin) -> {
+//            spawn("scoreText", new SpawnData(coin.getX(), coin.getY()).put("text", "+100 Points!"));
+//            coin.removeFromWorld();
+//            inc("score", 100);
+//        });
 
 //        onCollisionBegin(EntityType.PLAYER, EntityType.FLAG, (player, flag) -> {
 //            getDialogService().showMessageBox("Level Complete!");
@@ -105,65 +133,16 @@ public class PlatformerApp extends GameApplication {
 //            button.getComponent(ButtonComponent.class).activateButton();
 //        });
 
-        onCollisionBegin(EntityType.ENEMY, EntityType.PLAYER, (enemy, player) -> {
-            playerLivesTest();
-            player.getComponent(PlayerControl.class).invulnerabilityTest(player, enemy);
-        });
-
-        onCollisionBegin(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
-            enemy.getComponent(EnemyAIComponent.class).directionChange();
-        });
-
-//        onCollisionBegin(EntityType.PLAYER, EntityType.COIN, (player, coin) -> {
-//            spawn("scoreText", new SpawnData(coin.getX(), coin.getY()).put("text", "+100 Points!"));
-//            coin.removeFromWorld();
-//            inc("score", 100);
-//        });
-
-        onCollisionBegin(EntityType.PLAYER, EntityType.KEY, (player, key) -> {
-            if (!getb("keyDialogue")) {
-                getDialogService().showMessageBox("Use keys to unlock crates to release clouds.");
-                set("keyDialogue", true);
-            }
-            spawn("keyDisappearAnimation", key.getX(), key.getY());
-            inc("keys", 1);
-            key.removeFromWorld();
-        });
-
-        onCollisionBegin(EntityType.PLAYER, EntityType.CRATE, (player, crate) -> {
-            PropertyMap cloudPosition = crate.getProperties();
-            if (geti("keys") > 0) {
-                Entity e = getGameWorld().create("revealedPlatform1", new SpawnData(cloudPosition.getInt("cloudX"),
-                        cloudPosition.getInt("cloudY")));
-                spawnWithScale(e, Duration.seconds(.8), Interpolators.SMOOTH.EASE_IN());
-                spawn("crateAnimation", crate.getX(), crate.getY());
-                crate.removeFromWorld();
-                inc("keys", -1);
-                if (!getb("revealedPlatformDialogue")) {
-                    getDialogService().showMessageBox("You freed a cloud! Move quickly, they don't stick around " +
-                            "long!");
-                    set("revealedPlatformDialogue", true);
-                }
-            }
-        });
-
         onCollision(EntityType.STONE, EntityType.GROUND, (stone, ground) -> stone.removeFromWorld());
         onCollision(EntityType.STONE, EntityType.WALL, (stone, wall) -> stone.removeFromWorld());
-
+        onCollision(EntityType.STONE, EntityType.BLOCK, (stone, block) -> stone.removeFromWorld());
         onCollision(EntityType.STONE, EntityType.ENEMY, (stone, enemy) -> {
-            enemy.removeFromWorld();
-            stone.removeFromWorld();
-            spawn("scoreText", new SpawnData(enemy.getX(), enemy.getY()).put("text", "+200 Points!"));
-            inc("score", +200);
+            stone.getComponent(StoneControl.class).hitEnemy(stone, enemy);
         });
     }
 
     public void playerLivesTest() {
-        if (geti("lives")>1) {
-            inc("lives", -1);
-        } else {
-            gameOverDialogue();
-        }
+        new PlayerControl().livesTest();
     }
 
     public void gameOverDialogue() {
