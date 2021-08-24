@@ -59,7 +59,7 @@ public class EnemyAIComponent extends Component {
         player = getGameWorld().getSingleton(com.cloudHopper.EntityType.PLAYER);
 
         if (entity.distance(player) < getAppWidth()/2 && !getb("enemyDialogue"))  {
-            getDialogService().showMessageBox("Watch out for that! Press W to throw a rock!");
+            getNotificationService().pushNotification("Press W to throw a rock!");
             set("enemyDialogue", true);
         }
 
@@ -157,7 +157,7 @@ public class EnemyAIComponent extends Component {
     }
 
     public void blockOnHead(Entity enemy, Entity block) {
-        if (block.getY()+60 < enemy.getY()) {
+        if (block.getY()+30 < enemy.getY()) {
             killEnemy(enemy);
         }
     }

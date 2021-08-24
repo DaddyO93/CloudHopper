@@ -6,9 +6,12 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.ui.FontType;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.Map;
@@ -43,6 +46,7 @@ public class PlatformerApp extends GameApplication {
         vars.put("enemyDialogue", false);
         vars.put("playerMovementSpeed", 256);
         vars.put("playerJumpDistance", 608);
+        vars.put("pushingBlock", false);
         vars.put("enemyMovementSpeed", 100);
         vars.put("enemyDirection", "right");
         vars.put("stoneMovementSpeed", 700);
@@ -78,15 +82,14 @@ public class PlatformerApp extends GameApplication {
         viewport.bindToEntity(player, getAppWidth()/2, getAppHeight()/2);
         viewport.setLazy(true);
 
-        spawn("backgroundZ8");
-        spawn("backgroundZ7");
+//        spawn("backgroundZ8");
+//        spawn("backgroundZ7");
 //        spawn("backgroundZ6");
-        spawn("backgroundZ5");
-        spawn("backgroundZ4");
-        spawn("backgroundZ3");
-//        spawn("backgroundZ2");
+//        spawn("backgroundZ5");
+//        spawn("backgroundZ4");
+//        spawn("backgroundZ3");
+        spawn("backgroundZ2");
         spawn("backgroundZ1");
-
     }
 
     @Override
@@ -94,7 +97,7 @@ public class PlatformerApp extends GameApplication {
         getPhysicsWorld().setGravity(0, 1100);
 
         onCollisionBegin(EntityType.ENEMY, EntityType.PLAYER, (enemy, player) -> {
-            playerLivesTest();
+            player.getComponent(PlayerControl.class).livesTest();
             player.getComponent(PlayerControl.class).invulnerabilityTest(player);
         });
         onCollisionBegin(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
@@ -104,8 +107,14 @@ public class PlatformerApp extends GameApplication {
             enemy.getComponent(EnemyAIComponent.class).blockOnHead(enemy, block);
         });
 
-        onCollisionBegin(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
-            block.getComponent(BlockControl.class).message();
+//        onCollision(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
+//            System.out.println((player.getX()));
+//
+//            block.getComponent(BlockControl.class).message();
+//            set("pushingBlock", true);
+//        });
+        onCollision(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
+            set("pushingBlock", true);
         });
         onCollisionBegin(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
             player.getComponent(PlayerControl.class).wallTest(player, wall);
@@ -141,10 +150,6 @@ public class PlatformerApp extends GameApplication {
         });
     }
 
-    public void playerLivesTest() {
-        new PlayerControl().livesTest();
-    }
-
     public void gameOverDialogue() {
         getDialogService().showConfirmationBox("Game Over. Play Again?", this::playAgain);
     }
@@ -160,7 +165,13 @@ public class PlatformerApp extends GameApplication {
     @Override
     protected void initUI() {
         super.initUI();
-        var scoreText = getUIFactoryService().newText("", 24);
+
+        Font fontGame = getUIFactoryService().newFont(FontType.GAME, 24.0);
+
+//        var scoreText = getUIFactoryService().newText("", 24);
+        Text scoreText = new Text("");
+        scoreText.setFont(fontGame);
+        scoreText.setFill(Color.WHITE);
         scoreText.textProperty().bind(getip("score").asString("Score: %d"));
         getWorldProperties().addListener("score", (prev, now) -> {
             animationBuilder()
@@ -174,7 +185,10 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
-        var keyText = getUIFactoryService().newText("", 24);
+//        var keyText = getUIFactoryService().newText("", 24);
+        Text keyText = new Text("");
+        keyText.setFont(fontGame);
+        keyText.setFill(Color.WHITE);
         keyText.textProperty().bind(getip("keys").asString("Keys: %d"));
         getWorldProperties().addListener("keys", (prev, now) -> {
             animationBuilder()
@@ -188,7 +202,10 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
-        var livesText = getUIFactoryService().newText("", 24);
+//        var livesText = getUIFactoryService().newText("", 24);
+        Text livesText = new Text("");
+        livesText.setFont(fontGame);
+        livesText.setFill(Color.WHITE);
         livesText.textProperty().bind(getip("lives").asString("Lives: %d"));
         getWorldProperties().addListener("lives", (prev, now) -> {
             animationBuilder()
@@ -202,7 +219,7 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
-        addUINode(livesText, 50, getAppHeight()-60);
+        addUINode(livesText, 550, getAppHeight()-20);
         addUINode(scoreText, 50, getAppHeight()-20);
         addUINode(keyText, 300, getAppHeight()-20);
     }

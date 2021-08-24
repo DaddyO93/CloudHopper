@@ -2,6 +2,7 @@ package com.cloudHopper;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
@@ -19,30 +20,73 @@ public class PlayerControl extends Component {
     private Integer movementSpeed = geti("playerMovementSpeed");
     private Integer jumpDistance = geti("playerJumpDistance");
     private LocalTimer invulnerability;
+    private Boolean invulnerabilityTimer = false;
 
     private Point2D startPosition = geto("startPosition");
 
     private AnimatedTexture texture;
-    private AnimationChannel animationIde, animationWalk;
+//    private AnimationChannel animationIde, animationWalk;
+    private AnimationChannel animationIde, animationWalk, animationJump, animationPush;
+
+//    public PlayerControl() {
+//        animationIde = new AnimationChannel(
+//                image("player_idle.png"),
+//                3,
+//                70,
+//                100,
+//                Duration.seconds(.5),
+//                0,
+//                0);
+//
+//        animationWalk = new AnimationChannel(
+//                image("player_walking.png"),
+//                3,
+//                70,
+//                100,
+//                Duration.seconds(.5),
+//                0,
+//                2);
+//
+//        //  this is the default animation
+//        texture = new AnimatedTexture(animationIde).loop();
+//    }
 
     public PlayerControl() {
         animationIde = new AnimationChannel(
-                image("player_idle.png"),
-                3,
-                70,
-                100,
+                image("single.png"),
+                4,
+                60,
+                64,
+                Duration.seconds(.5),
+                1,
+                1);
+
+        animationWalk = new AnimationChannel(
+                image("single.png"),
+                4,
+                60,
+                64,
+                Duration.seconds(.5),
+                0,
+                3);
+
+        animationJump = new AnimationChannel(
+                image("single.png"),
+                4,
+                60,
+                64,
                 Duration.seconds(.5),
                 0,
                 0);
 
-        animationWalk = new AnimationChannel(
-                image("player_walking.png"),
-                3,
-                70,
-                100,
+        animationPush = new AnimationChannel(
+                image("singlePushing.png"),
+                4,
+                60,
+                64,
                 Duration.seconds(.5),
                 0,
-                2);
+                3);
 
         //  this is the default animation
         texture = new AnimatedTexture(animationIde).loop();
@@ -55,20 +99,32 @@ public class PlayerControl extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        if (physics.isMoving()) {
+        if (getb("pushingBlock") && physics.isMoving()) {
+            if (texture.getAnimationChannel() != animationPush) {
+                texture.loopAnimationChannel(animationPush);
+            }
+        } else if (physics.isMovingY()) {
+            if (texture.getAnimationChannel() != animationJump) {
+                texture.loopAnimationChannel(animationJump);
+            }
+        } else if (physics.isMovingX()) {
             if (texture.getAnimationChannel() != animationWalk) {
                 texture.loopAnimationChannel(animationWalk);
             }
-        } else {
-            if (texture.getAnimationChannel() != animationIde) {
+        } else {if (texture.getAnimationChannel() != animationIde) {
                 texture.loopAnimationChannel(animationIde);
             }
         }
 
         if (entity.getY() > geti("maxY")) {
-            new com.cloudHopper.PlatformerApp().playerLivesTest();
+            livesTest();
             restart(entity);
         }
+
+        if (invulnerabilityTimer)
+            invulnerabilityTest(entity);
+
+        set("pushingBlock", false);
     }
 
     public void left(Entity player) {
@@ -107,8 +163,6 @@ public class PlayerControl extends Component {
         physics.setVelocityX(distance);
     }
 
-
-
     public void wallTest(Entity player, Entity wall) {
         int facing = 1;
         if (player.getX() > wall.getX()) {
@@ -133,13 +187,17 @@ public class PlayerControl extends Component {
         if (!getb("invulnerable")) {
             invulnerability = newLocalTimer();
             invulnerability.capture();
+            player.getComponent(CollidableComponent.class).addIgnoredType(EntityType.ENEMY);
             set("invulnerable", true);
+            invulnerabilityTimer = true;
+            knockBack(player);
         } else {
             if (invulnerability.elapsed(Duration.seconds(4))) {
+                player.getComponent(CollidableComponent.class).removeIgnoredType(EntityType.ENEMY);
                 set("invulnerable", false);
+                invulnerabilityTimer = false;
             }
         }
-        knockBack(player);
     }
 
     private void knockBack(Entity player) {

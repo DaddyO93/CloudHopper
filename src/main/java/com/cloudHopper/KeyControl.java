@@ -33,7 +33,7 @@ public class KeyControl extends Component {
     public void onAdded() { entity.getViewComponent().addChild(texture);}
 
     private void message() {
-        getDialogService().showMessageBox("Use keys to unlock crates to release clouds.");
+        getNotificationService().pushNotification("Use keys to unlock crates.");
         set("keyDialogue", true);
     }
 

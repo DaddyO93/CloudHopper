@@ -10,9 +10,8 @@ import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class CrateControl extends Component {
-    public void messages() {
-        getDialogService().showMessageBox("You freed a cloud! Move quickly, they don't stick around " +
-                "long!");
+    private void messages(double x, double y) {
+        getNotificationService().pushNotification("You freed a cloud! Move quickly!");
         set("revealedPlatformDialogue", true);
     }
 
@@ -25,7 +24,7 @@ public class CrateControl extends Component {
             crate.removeFromWorld();
             inc("keys", -1);
             if (!getb("revealedPlatformDialogue")) {
-                messages();
+                messages(crate.getX(), crate.getY());
         }
     }
 }

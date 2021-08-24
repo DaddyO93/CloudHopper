@@ -30,7 +30,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder()
                 .view(new ScrollingBackgroundView(image("z-1.png"), getAppWidth(), geti("maxY"),
                         Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00022)+1))
+                        (geti("playerMovementSpeed")*.0003)+1))
                 .zIndex(-1)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
@@ -41,7 +41,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder()
                 .view(new ScrollingBackgroundView(image("z-2.png"), getAppWidth(), geti("maxY"),
                         Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00019)+1))
+                        (geti("playerMovementSpeed")*.00008)+1))
                 .zIndex(-2)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
@@ -107,7 +107,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder()
                 .view(new ScrollingBackgroundView(image("z-8.png"), getAppWidth(), geti("maxY"),
                         Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00006)+1))
+                        (geti("playerMovementSpeed")*.00001)+1))
                 .zIndex(-8)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
@@ -121,7 +121,8 @@ public class GameEntityFactory implements EntityFactory {
 
         return entityBuilder(data)
                 .type(PLAYER)
-                .bbox(new HitBox(BoundingShape.box(50, 100)))   //  current width/height of sprite
+//                .bbox(new HitBox(BoundingShape.box(50, 100)))   //  current width/height of sprite
+                .bbox(new HitBox(BoundingShape.box(48, 64)))   //  current width/height of sprite
                 .with(physics)
                 .with(new PlayerControl())
                 .collidable()
@@ -157,8 +158,6 @@ public class GameEntityFactory implements EntityFactory {
 
     @Spawns("ground")
     public Entity newGround(SpawnData data) {
-//        PhysicsComponent physics = new PhysicsComponent();
-//        physics.setFixtureDef(new FixtureDef().friction(9.0f));
 
         return entityBuilder(data)
                 .type(GROUND)
@@ -214,7 +213,7 @@ public class GameEntityFactory implements EntityFactory {
     @Spawns("block")
     public Entity newBlock(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
-        physics.setFixtureDef(new FixtureDef().density(15f));
+        physics.setFixtureDef(new FixtureDef().density(18f));
         physics.setBodyType(BodyType.DYNAMIC);
 
         return entityBuilder(data)
