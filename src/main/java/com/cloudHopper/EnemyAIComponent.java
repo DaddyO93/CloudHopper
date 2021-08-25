@@ -72,8 +72,6 @@ public class EnemyAIComponent extends Component {
     }
 
     private final EntityState PATROL = new EntityState("PATROL") {
-        private String direction = "left";
-
         @Override
         public void onEntering() {
             speed = patrolSpeed;

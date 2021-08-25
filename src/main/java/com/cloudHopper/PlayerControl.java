@@ -21,35 +21,12 @@ public class PlayerControl extends Component {
     private Integer jumpDistance = geti("playerJumpDistance");
     private LocalTimer invulnerability;
     private Boolean invulnerabilityTimer = false;
+    private LocalTimer attackTimer;
 
     private Point2D startPosition = geto("startPosition");
 
     private AnimatedTexture texture;
-//    private AnimationChannel animationIde, animationWalk;
     private AnimationChannel animationIde, animationWalk, animationJump, animationPush;
-
-//    public PlayerControl() {
-//        animationIde = new AnimationChannel(
-//                image("player_idle.png"),
-//                3,
-//                70,
-//                100,
-//                Duration.seconds(.5),
-//                0,
-//                0);
-//
-//        animationWalk = new AnimationChannel(
-//                image("player_walking.png"),
-//                3,
-//                70,
-//                100,
-//                Duration.seconds(.5),
-//                0,
-//                2);
-//
-//        //  this is the default animation
-//        texture = new AnimatedTexture(animationIde).loop();
-//    }
 
     public PlayerControl() {
         animationIde = new AnimationChannel(
@@ -94,6 +71,7 @@ public class PlayerControl extends Component {
 
     @Override
     public void onAdded() {
+        attackTimer = newLocalTimer();
         entity.getViewComponent().addChild(texture);
     }
 
@@ -156,7 +134,10 @@ public class PlayerControl extends Component {
     }
 
     public void attack(Entity player) {
-        spawn("stone", player.getX()+35, player.getY());
+        if (attackTimer.elapsed(Duration.seconds(.3))) {
+            spawn("stone", player.getX()+35, player.getY());
+            attackTimer.capture();
+        }
     }
 
     public void move(int distance) {
