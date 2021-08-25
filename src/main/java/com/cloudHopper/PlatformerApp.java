@@ -38,9 +38,11 @@ public class PlatformerApp extends GameApplication {
         super.initGameVars(vars);
         vars.put("score", 0);
         vars.put("keys", 0);
+        vars.put("stars", 0);
         vars.put("lives", 3);
         vars.put("invulnerable", false);
         vars.put("keyDialogue", false);
+        vars.put("starDialogue", false);
         vars.put("blockDialogue", false);
         vars.put("revealedPlatformDialogue", false);
         vars.put("enemyDialogue", false);
@@ -126,6 +128,9 @@ public class PlatformerApp extends GameApplication {
             if (geti("keys") > 0) {
                 crate.getComponent(CrateControl.class).spawnCloud(crate);
             }
+        });
+        onCollisionBegin(EntityType.PLAYER, EntityType.STAR, (player, star) -> {
+            star.getComponent(StarControl.class).spawnDisappearingStar(star);
         });
 
 //        onCollisionBegin(EntityType.PLAYER, EntityType.COIN, (player, coin) -> {

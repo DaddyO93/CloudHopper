@@ -30,7 +30,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder()
                 .view(new ScrollingBackgroundView(image("z-1.png"), getAppWidth(), geti("maxY"),
                         Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.0003)+1))
+                        (geti("playerMovementSpeed")*.0002)+1))
                 .zIndex(-1)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
@@ -43,72 +43,6 @@ public class GameEntityFactory implements EntityFactory {
                         Orientation.HORIZONTAL,
                         (geti("playerMovementSpeed")*.00008)+1))
                 .zIndex(-2)
-                .with(new IrremovableComponent())
-                .buildAndAttach();
-    }
-
-    @Spawns("backgroundZ3")
-    public Entity newBackgroundZ3(SpawnData data) {
-        return entityBuilder()
-                .view(new ScrollingBackgroundView(image("z-3.png"), getAppWidth(), geti("maxY"),
-                        Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00016)+1))
-                .zIndex(-3)
-                .with(new IrremovableComponent())
-                .buildAndAttach();
-    }
-
-    @Spawns("backgroundZ4")
-    public Entity newBackgroundZ4(SpawnData data) {
-        return entityBuilder()
-                .view(new ScrollingBackgroundView(image("z-4.png"), getAppWidth(), geti("maxY"),
-                        Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00013)+1))
-                .zIndex(-4)
-                .with(new IrremovableComponent())
-                .buildAndAttach();
-    }
-
-    @Spawns("backgroundZ5")
-    public Entity newBackgroundZ5(SpawnData data) {
-        return entityBuilder()
-                .view(new ScrollingBackgroundView(image("z-5.png"), getAppWidth(), geti("maxY"),
-                        Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00011)+1))
-                .zIndex(-5)
-                .with(new IrremovableComponent())
-                .buildAndAttach();
-    }
-
-    @Spawns("backgroundZ6")
-    public Entity newBackgroundZ6(SpawnData data) {
-        return entityBuilder()
-                .view(new ScrollingBackgroundView(image("z-6.png"), getAppWidth(), geti("maxY"),
-                        Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00009)+1))
-                .zIndex(-6)
-                .with(new IrremovableComponent())
-                .buildAndAttach();
-    }
-
-    @Spawns("backgroundZ7")
-    public Entity newBackgroundZ7(SpawnData data) {
-        return entityBuilder()
-                .view(new ScrollingBackgroundView(image("z-7.png"), getAppWidth(), geti("maxY"),
-                        Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00007)+1))
-                .zIndex(-7)
-                .with(new IrremovableComponent())
-                .buildAndAttach();
-    }
-
-    @Spawns("backgroundZ8")
-    public Entity newBackgroundZ8(SpawnData data) {
-        return entityBuilder()
-                .view(new ScrollingBackgroundView(image("z-8.png"), getAppWidth(), geti("maxY"),
-                        Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00001)+1))
-                .zIndex(-8)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
     }
@@ -225,9 +159,36 @@ public class GameEntityFactory implements EntityFactory {
                 .build();
     }
 
+    @Spawns("star")
+    public Entity newStar(SpawnData data) {
+        return entityBuilder(data)
+                .type(STAR)
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .with(new StarControl())
+                .collidable()
+                .build();
+    }
+
+    @Spawns("starDisappearingAnimation")
+    public Entity newStarDisappearingAnimation(SpawnData data) {
+        var e = entityBuilder(data)
+                .view("star.png")
+                .with(new ExpireCleanComponent(Duration.seconds(.8)).animateOpacity())
+                .build();
+
+        animationBuilder()
+                .duration(Duration.seconds(.8))
+                .interpolator(Interpolators.EXPONENTIAL.EASE_OUT())
+                .translate(e)
+                .from(new Point2D(data.getX(), data.getY()))
+                .to(new Point2D(data.getX(), data.getY()-30))
+                .buildAndPlay();
+
+        return e;
+    }
+
     @Spawns("key")
     public Entity newKey(SpawnData data) {
-
         return entityBuilder(data)
                 .type(KEY)
                 .bbox(new HitBox(BoundingShape.box(64, 64)))
