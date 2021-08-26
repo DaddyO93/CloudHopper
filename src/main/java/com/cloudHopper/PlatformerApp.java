@@ -39,7 +39,7 @@ public class PlatformerApp extends GameApplication {
         vars.put("score", 0);
         vars.put("keys", 0);
         vars.put("stars", 0);
-        vars.put("lives", 3);
+        vars.put("lives", 1);
         vars.put("invulnerable", false);
         vars.put("keyDialogue", false);
         vars.put("starDialogue", false);
@@ -133,12 +133,6 @@ public class PlatformerApp extends GameApplication {
             star.getComponent(StarControl.class).spawnDisappearingStar(star);
         });
 
-//        onCollisionBegin(EntityType.PLAYER, EntityType.COIN, (player, coin) -> {
-//            spawn("scoreText", new SpawnData(coin.getX(), coin.getY()).put("text", "+100 Points!"));
-//            coin.removeFromWorld();
-//            inc("score", 100);
-//        });
-
 //        onCollisionBegin(EntityType.PLAYER, EntityType.FLAG, (player, flag) -> {
 //            getDialogService().showMessageBox("Level Complete!");
 //        });
@@ -207,7 +201,8 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
-//        var livesText = getUIFactoryService().newText("", 24);
+
+
         Text livesText = new Text("");
         livesText.setFont(fontGame);
         livesText.setFill(Color.WHITE);
@@ -224,7 +219,7 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
-        addUINode(livesText, 550, getAppHeight()-20);
+        addUINode(livesText, 50, getAppHeight()-60);
         addUINode(scoreText, 50, getAppHeight()-20);
         addUINode(keyText, 300, getAppHeight()-20);
     }

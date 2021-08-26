@@ -214,6 +214,16 @@ public class GameEntityFactory implements EntityFactory {
         return e;
     }
 
+    @Spawns("crate")
+    public Entity newCrate(SpawnData data) {
+        return entityBuilder(data)
+                .type(CRATE)
+                .viewWithBBox("crate.png")
+                .with(new CrateControl())
+                .collidable()
+                .build();
+    }
+
     @Spawns("crateAnimation")
     public Entity newCrateAnimation(SpawnData data) {
         var e = entityBuilder(data)
@@ -231,14 +241,11 @@ public class GameEntityFactory implements EntityFactory {
         return e;
     }
 
-    @Spawns("crate")
-    public Entity newCrate(SpawnData data) {
-
+    @Spawns("heart")
+    public Entity newHeart(SpawnData data) {
         return entityBuilder(data)
-                .type(CRATE)
-                .viewWithBBox("crate.png")
-                .with(new CrateControl())
-                .collidable()
+                .type(HEART)
+                .with(new HeartControl())
                 .build();
     }
 
