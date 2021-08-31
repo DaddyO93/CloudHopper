@@ -7,11 +7,18 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class LifeControl extends Component {
 
+//    public Node displayHearts() {
+//        for (int i = 0; i < geti("lives"); i++) {
+//            addUINode(addLife(), 100+(32*i), getAppHeight()-60);
+//        }
+//    }
+
+
     @Override
     public void onAdded() {
-        for (int i = 0; i < geti("lives"); i++) {
-            spawn("heart", 100+(32*i), getAppHeight()-60);
-        }
+//        for (int i = 0; i < geti("lives"); i++) {
+//            spawn("heart", 100+(32*i), getAppHeight()-60);
+//        }
     }
 
     @Override

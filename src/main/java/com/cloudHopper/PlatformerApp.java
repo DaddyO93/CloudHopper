@@ -6,7 +6,9 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.ui.FontType;
+import com.sun.security.jgss.GSSUtil;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -92,7 +94,7 @@ public class PlatformerApp extends GameApplication {
 //        spawn("backgroundZ3");
         spawn("backgroundZ2");
         spawn("backgroundZ1");
-    }
+        }
 
     @Override
     protected void initPhysics() {
@@ -109,12 +111,6 @@ public class PlatformerApp extends GameApplication {
             enemy.getComponent(EnemyAIComponent.class).blockOnHead(enemy, block);
         });
 
-//        onCollision(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
-//            System.out.println((player.getX()));
-//
-//            block.getComponent(BlockControl.class).message();
-//            set("pushingBlock", true);
-//        });
         onCollision(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
             set("pushingBlock", true);
         });
@@ -165,9 +161,9 @@ public class PlatformerApp extends GameApplication {
     protected void initUI() {
         super.initUI();
 
+
         Font fontGame = getUIFactoryService().newFont(FontType.GAME, 24.0);
 
-//        var scoreText = getUIFactoryService().newText("", 24);
         Text scoreText = new Text("");
         scoreText.setFont(fontGame);
         scoreText.setFill(Color.WHITE);
@@ -184,7 +180,6 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
-//        var keyText = getUIFactoryService().newText("", 24);
         Text keyText = new Text("");
         keyText.setFont(fontGame);
         keyText.setFill(Color.WHITE);
@@ -200,8 +195,6 @@ public class PlatformerApp extends GameApplication {
                     .to(new Point2D(1.2, 1.2))
                     .buildAndPlay();
         });
-
-
 
         Text livesText = new Text("");
         livesText.setFont(fontGame);
@@ -219,7 +212,14 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
-        addUINode(livesText, 50, getAppHeight()-60);
+        for (int i = 0; i < geti("lives"); i++) {
+//            Point2D location = new Point2D(100 + (32 * i), getAppHeight() - 60);
+            AnimatedTexture heartImage = new HeartControl().texture;
+            addUINode(heartImage, 50 + (32 * i), getAppHeight() - 75);
+            System.out.println("displaying hearts");
+        }
+
+//        addUINode(livesText, 50, getAppHeight()-60);
         addUINode(scoreText, 50, getAppHeight()-20);
         addUINode(keyText, 300, getAppHeight()-20);
     }

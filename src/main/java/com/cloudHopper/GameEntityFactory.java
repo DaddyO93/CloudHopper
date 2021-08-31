@@ -245,6 +245,7 @@ public class GameEntityFactory implements EntityFactory {
     public Entity newHeart(SpawnData data) {
         return entityBuilder(data)
                 .type(HEART)
+                .view("hearts.png")
                 .with(new HeartControl())
                 .build();
     }

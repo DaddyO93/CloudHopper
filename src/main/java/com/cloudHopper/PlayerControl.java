@@ -95,7 +95,8 @@ public class PlayerControl extends Component {
         }
 
         if (entity.getY() > geti("maxY")) {
-            livesTest();
+            new HeartControl().takeDamage();
+//            livesTest();
             restart(entity);
         }
 
