@@ -2,6 +2,7 @@ package com.cloudHopper;
 
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
@@ -16,11 +17,14 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 import static com.cloudHopper.EntityType.*;
 
 public class GameEntityFactory implements EntityFactory {
@@ -56,7 +60,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder(data)
                 .type(PLAYER)
 //                .bbox(new HitBox(BoundingShape.box(50, 100)))   //  current width/height of sprite
-                .bbox(new HitBox(BoundingShape.box(48, 64)))   //  current width/height of sprite
+                .bbox(new HitBox(BoundingShape.box(40, 64)))   //  current width/height of sprite
                 .with(physics)
                 .with(new PlayerControl())
                 .collidable()
@@ -72,6 +76,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(STONE)
                 .viewWithBBox("stone.png")
                 .with(physics)
+                .with(new CollidableComponent(true))
                 .with(new StoneControl())
                 .with(new OffscreenCleanComponent())
                 .collidable()
@@ -246,6 +251,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder(data)
                 .type(HEART)
                 .view("hearts.png")
+                .with(new HealthIntComponent(2))
                 .with(new HeartControl())
                 .build();
     }

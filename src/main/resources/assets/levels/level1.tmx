@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.1" orientation="orthogonal" renderorder="right-down" width="320" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="232">
+<map version="1.5" tiledversion="1.7.1" orientation="orthogonal" renderorder="right-down" width="320" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="238">
  <editorsettings>
   <export target="../json/level1.json" format="json"/>
  </editorsettings>
@@ -31,7 +31,7 @@
 </data>
  </layer>
  <objectgroup id="11" name="Object Layer">
-  <object id="53" name="ground" type="ground" x="-0.78788" y="1090.15" width="640" height="27"/>
+  <object id="53" name="ground" type="ground" x="-0.78788" y="1090.15" width="640" height="5"/>
   <object id="54" name="ground" type="ground" x="704.212" y="1153.65" width="190" height="5"/>
   <object id="55" name="ground" type="ground" x="960.212" y="1088.65" width="190" height="9"/>
   <object id="56" name="ground" type="ground" x="1218.21" y="1025.65" width="383" height="27"/>
@@ -298,6 +298,24 @@
    <point/>
   </object>
   <object id="231" name="star" type="star" x="797" y="1088">
+   <point/>
+  </object>
+  <object id="232" name="star" type="star" x="996" y="1021">
+   <point/>
+  </object>
+  <object id="233" name="star" type="star" x="1106" y="1021">
+   <point/>
+  </object>
+  <object id="234" name="star" type="star" x="1121" y="701">
+   <point/>
+  </object>
+  <object id="235" name="star" type="star" x="2596" y="574">
+   <point/>
+  </object>
+  <object id="236" name="star" type="star" x="2913" y="1086">
+   <point/>
+  </object>
+  <object id="237" name="star" type="star" x="6188" y="1087">
    <point/>
   </object>
  </objectgroup>

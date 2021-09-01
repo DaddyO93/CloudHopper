@@ -95,8 +95,8 @@ public class PlayerControl extends Component {
         }
 
         if (entity.getY() > geti("maxY")) {
-            new HeartControl().takeDamage();
-//            livesTest();
+            HeartControl.takeDamage();
+//            heartsTest();
             restart(entity);
         }
 
@@ -136,7 +136,7 @@ public class PlayerControl extends Component {
 
     public void attack(Entity player) {
         if (attackTimer.elapsed(Duration.seconds(.3))) {
-            spawn("stone", player.getX()+35, player.getY());
+            spawn("stone", player.getX() + 20, player.getY());
             attackTimer.capture();
         }
     }
@@ -151,14 +151,6 @@ public class PlayerControl extends Component {
             facing = -1;
         }
         move(20 * facing);
-    }
-
-    public void livesTest() {
-        if (geti("lives")>1) {
-            inc("lives", -1);
-        } else {
-            new PlatformerApp().gameOverDialogue();
-        }
     }
 
     private void restart(Entity player) {

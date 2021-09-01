@@ -20,7 +20,7 @@
          "name":"Object Layer",
          "objects":[
                 {
-                 "height":27,
+                 "height":5,
                  "id":53,
                  "name":"ground",
                  "rotation":0,
@@ -1537,6 +1537,78 @@
                  "width":0,
                  "x":797,
                  "y":1088
+                }, 
+                {
+                 "height":0,
+                 "id":232,
+                 "name":"star",
+                 "point":true,
+                 "rotation":0,
+                 "type":"star",
+                 "visible":true,
+                 "width":0,
+                 "x":996,
+                 "y":1021
+                }, 
+                {
+                 "height":0,
+                 "id":233,
+                 "name":"star",
+                 "point":true,
+                 "rotation":0,
+                 "type":"star",
+                 "visible":true,
+                 "width":0,
+                 "x":1106,
+                 "y":1021
+                }, 
+                {
+                 "height":0,
+                 "id":234,
+                 "name":"star",
+                 "point":true,
+                 "rotation":0,
+                 "type":"star",
+                 "visible":true,
+                 "width":0,
+                 "x":1121,
+                 "y":701
+                }, 
+                {
+                 "height":0,
+                 "id":235,
+                 "name":"star",
+                 "point":true,
+                 "rotation":0,
+                 "type":"star",
+                 "visible":true,
+                 "width":0,
+                 "x":2596,
+                 "y":574
+                }, 
+                {
+                 "height":0,
+                 "id":236,
+                 "name":"star",
+                 "point":true,
+                 "rotation":0,
+                 "type":"star",
+                 "visible":true,
+                 "width":0,
+                 "x":2913,
+                 "y":1086
+                }, 
+                {
+                 "height":0,
+                 "id":237,
+                 "name":"star",
+                 "point":true,
+                 "rotation":0,
+                 "type":"star",
+                 "visible":true,
+                 "width":0,
+                 "x":6188,
+                 "y":1087
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1545,7 +1617,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":232,
+ "nextobjectid":238,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.1",

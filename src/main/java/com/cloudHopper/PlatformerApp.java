@@ -4,11 +4,11 @@ import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
-import com.sun.security.jgss.GSSUtil;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -41,7 +41,7 @@ public class PlatformerApp extends GameApplication {
         vars.put("score", 0);
         vars.put("keys", 0);
         vars.put("stars", 0);
-        vars.put("lives", 1);
+        vars.put("hearts", 1);
         vars.put("invulnerable", false);
         vars.put("keyDialogue", false);
         vars.put("starDialogue", false);
@@ -86,12 +86,6 @@ public class PlatformerApp extends GameApplication {
         viewport.bindToEntity(player, getAppWidth()/2, getAppHeight()/2);
         viewport.setLazy(true);
 
-//        spawn("backgroundZ8");
-//        spawn("backgroundZ7");
-//        spawn("backgroundZ6");
-//        spawn("backgroundZ5");
-//        spawn("backgroundZ4");
-//        spawn("backgroundZ3");
         spawn("backgroundZ2");
         spawn("backgroundZ1");
         }
@@ -101,7 +95,7 @@ public class PlatformerApp extends GameApplication {
         getPhysicsWorld().setGravity(0, 1100);
 
         onCollisionBegin(EntityType.ENEMY, EntityType.PLAYER, (enemy, player) -> {
-            player.getComponent(PlayerControl.class).livesTest();
+            HeartControl.takeDamage();
             player.getComponent(PlayerControl.class).invulnerabilityTest(player);
         });
         onCollisionBegin(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
@@ -161,7 +155,6 @@ public class PlatformerApp extends GameApplication {
     protected void initUI() {
         super.initUI();
 
-
         Font fontGame = getUIFactoryService().newFont(FontType.GAME, 24.0);
 
         Text scoreText = new Text("");
@@ -180,6 +173,22 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
+        Text starText = new Text("");
+        starText.setFont(fontGame);
+        starText.setFill(Color.WHITE);
+        starText.textProperty().bind(getip("stars").asString("Stars: %d"));
+        getWorldProperties().addListener("stars", (prev, now) -> {
+            animationBuilder()
+                .duration(Duration.seconds(.5))
+                .interpolator(Interpolators.BOUNCE.EASE_OUT())
+                .repeat(2)
+                .autoReverse(true)
+                .scale(starText)
+                .from(new Point2D(1, 1))
+                .to(new Point2D(1.2, 1.2))
+                .buildAndPlay();
+        });
+
         Text keyText = new Text("");
         keyText.setFont(fontGame);
         keyText.setFill(Color.WHITE);
@@ -196,30 +205,15 @@ public class PlatformerApp extends GameApplication {
                     .buildAndPlay();
         });
 
-        Text livesText = new Text("");
-        livesText.setFont(fontGame);
-        livesText.setFill(Color.WHITE);
-        livesText.textProperty().bind(getip("lives").asString("Lives: %d"));
-        getWorldProperties().addListener("lives", (prev, now) -> {
-            animationBuilder()
-                    .duration(Duration.seconds(.5))
-                    .interpolator(Interpolators.BOUNCE.EASE_OUT())
-                    .repeat(2)
-                    .autoReverse(true)
-                    .scale(livesText)
-                    .from(new Point2D(1, 1))
-                    .to(new Point2D(1.2, 1.2))
-                    .buildAndPlay();
-        });
-
-        for (int i = 0; i < geti("lives"); i++) {
-//            Point2D location = new Point2D(100 + (32 * i), getAppHeight() - 60);
-            AnimatedTexture heartImage = new HeartControl().texture;
-            addUINode(heartImage, 50 + (32 * i), getAppHeight() - 75);
-            System.out.println("displaying hearts");
+        int xLocation = 18;
+        for (int i = 0; i < geti("hearts"); i++) {
+            Entity heart = spawn("heart");
+            LifeControl.hearts.add(heart);
+            Texture heartImage = heart.getComponent(HeartControl.class).texture;
+            addUINode(heartImage, xLocation += 32, getAppHeight() - 75);
         }
 
-//        addUINode(livesText, 50, getAppHeight()-60);
+        addUINode(starText, 550, getAppHeight()-20);
         addUINode(scoreText, 50, getAppHeight()-20);
         addUINode(keyText, 300, getAppHeight()-20);
     }

@@ -2,6 +2,7 @@ package com.cloudHopper;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
@@ -15,6 +16,7 @@ public class StoneControl extends Component {
     @Override
     public void onAdded() {
         stoneMovementSpeed = stoneMovementSpeed * player.getScaleX();
+        entity.getComponent(CollidableComponent.class).addIgnoredType(EntityType.PLAYER);
     }
 
     @Override
