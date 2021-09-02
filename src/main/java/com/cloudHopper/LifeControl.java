@@ -14,4 +14,5 @@ public class LifeControl extends Component {
     @Override
     public void onUpdate(double tpf) {
     }
+
 }

@@ -7,10 +7,12 @@ import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.RaycastResult;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.time.LocalTimer;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -87,11 +89,15 @@ public class EnemyAIComponent extends Component {
         protected void onUpdate(double tpf) {
             if (gets("enemyDirection").equals("right")) {
                 // move entity right
+                edgeDetection(entity);
+
                 physics.setVelocityX(speed);
                 entity.setScaleX(-1);
 //                direction = "right";
             } else if (gets("enemyDirection").equals("left")) {
                 //  move entity left
+                edgeDetection(entity);
+
                 physics.setVelocityX(-speed);
                 entity.setScaleX(1);
 //                direction = "left";
@@ -166,10 +172,16 @@ public class EnemyAIComponent extends Component {
         inc("score", +200);
     }
 
-//    private void edgeDetection() {
-//        Point2D enemyTempLocation = entity.getPosition();
-//        physics.setVelocityX(speed);
-//        physics.addSensor(g);
-//        if (!enemyTempLocation.)
-//    }
+    private void edgeDetection(Entity enemy) {
+        int end = 60;
+        RaycastResult result = getPhysicsWorld().raycast(enemy.getCenter(),
+                new Point2D(enemy.getX()-48 * enemy.getScaleX(), enemy.getY()-48));
+
+        if (result.getPoint().isPresent()){}
+//            System.out.println(result.getEntity().f);
+
+//        result.getPoint().ifPresent(p -> {
+//            System.out.println("hit something");
+//    });
+    }
 }
