@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.1" orientation="orthogonal" renderorder="right-down" width="320" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="238">
+<map version="1.5" tiledversion="1.7.1" orientation="orthogonal" renderorder="right-down" width="320" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="250">
  <editorsettings>
   <export target="../json/level1.json" format="json"/>
  </editorsettings>
@@ -176,7 +176,7 @@
   <object id="173" name="block" type="block" x="7644" y="502">
    <point/>
   </object>
-  <object id="174" name="block" type="block" x="7361" y="377">
+  <object id="174" name="block" type="block" x="7312" y="385">
    <point/>
   </object>
   <object id="175" name="block" type="block" x="7102" y="240">
@@ -291,7 +291,7 @@
   <object id="228" name="enemy" type="enemy" x="10460" y="945">
    <point/>
   </object>
-  <object id="229" name="enemy" type="enemy" x="9823" y="374">
+  <object id="229" name="enemy" type="enemy" x="8928" y="704">
    <point/>
   </object>
   <object id="230" name="enemy" type="enemy" x="10982" y="893">
@@ -316,6 +316,42 @@
    <point/>
   </object>
   <object id="237" name="star" type="star" x="6188" y="1087">
+   <point/>
+  </object>
+  <object id="238" name="star" type="star" x="6312" y="704">
+   <point/>
+  </object>
+  <object id="239" name="star" type="star" x="6370" y="704">
+   <point/>
+  </object>
+  <object id="240" name="star" type="star" x="6427" y="705">
+   <point/>
+  </object>
+  <object id="241" name="star" type="star" x="7067" y="256">
+   <point/>
+  </object>
+  <object id="242" name="star" type="star" x="7517" y="130">
+   <point/>
+  </object>
+  <object id="243" name="star" type="star" x="9121" y="386">
+   <point/>
+  </object>
+  <object id="244" name="star" type="star" x="9186" y="386">
+   <point/>
+  </object>
+  <object id="245" name="star" type="star" x="9245" y="386">
+   <point/>
+  </object>
+  <object id="246" name="star" type="star" x="9890" y="385">
+   <point/>
+  </object>
+  <object id="247" name="star" type="star" x="9308" y="836">
+   <point/>
+  </object>
+  <object id="248" name="star" type="star" x="10398" y="643">
+   <point/>
+  </object>
+  <object id="249" name="star" type="star" x="10021" y="895">
    <point/>
   </object>
  </objectgroup>

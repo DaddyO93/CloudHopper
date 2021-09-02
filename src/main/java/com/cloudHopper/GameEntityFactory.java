@@ -85,6 +85,8 @@ public class GameEntityFactory implements EntityFactory {
 
     @Spawns("enemy")
     public Entity newEnemy(SpawnData data) {
+        var direction = "right";
+
         return entityBuilder(data)
                 .type(ENEMY)
                 .bbox(new HitBox(BoundingShape.box(48, 48)))
@@ -160,7 +162,7 @@ public class GameEntityFactory implements EntityFactory {
                 .viewWithBBox("StoneBlock.png")
                 .with(physics)
                 .with(new BlockControl())
-                .collidable()
+                .with(new CollidableComponent(true))
                 .build();
     }
 

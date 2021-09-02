@@ -145,14 +145,6 @@ public class PlayerControl extends Component {
         physics.setVelocityX(distance);
     }
 
-    public void wallTest(Entity player, Entity wall) {
-        int facing = 1;
-        if (player.getX() > wall.getX()) {
-            facing = -1;
-        }
-        move(20 * facing);
-    }
-
     private void restart(Entity player) {
         player.getComponent(PhysicsComponent.class).overwritePosition(startPosition);
     }

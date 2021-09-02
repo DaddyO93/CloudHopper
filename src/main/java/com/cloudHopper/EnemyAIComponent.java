@@ -30,6 +30,9 @@ public class EnemyAIComponent extends Component {
     private PhysicsComponent physics;
     private LocalTimer jumpTimer;
 
+    private String direction = "left";
+
+
     private AnimatedTexture texture;
     private AnimationChannel animationWalk;
 
@@ -87,27 +90,19 @@ public class EnemyAIComponent extends Component {
 
         @Override
         protected void onUpdate(double tpf) {
-            if (gets("enemyDirection").equals("right")) {
-                // move entity right
+            if (direction.equals("right")) {
                 edgeDetection(entity);
-
                 physics.setVelocityX(speed);
                 entity.setScaleX(-1);
-//                direction = "right";
-            } else if (gets("enemyDirection").equals("left")) {
-                //  move entity left
+            } else if (direction.equals("left")) {
                 edgeDetection(entity);
-
                 physics.setVelocityX(-speed);
                 entity.setScaleX(1);
-//                direction = "left";
             }
         }
     };
 
     private final EntityState ATTACK = new EntityState("ATTACK") {
-        private String direction = "left";
-
         @Override
         public void onEntering() {
             speed = attackSpeed;
@@ -122,18 +117,14 @@ public class EnemyAIComponent extends Component {
             }
 
             if (entity.getX() < player.getX() && direction.equals("left")) {
-                // move entity right
                 physics.setVelocityX(speed);
                 direction = "right";
             } else if (entity.getX() > player.getX() && direction.equals("right")) {
-                //  move entity left
                 physics.setVelocityX(-speed);
                 direction = "left";
             } else if (direction.equals("left")) {
-                //  move entity left
                 physics.setVelocityX(-speed);
             } else {
-                //  move entity right
                 physics.setVelocityX(speed);
             }
         }
@@ -150,12 +141,12 @@ public class EnemyAIComponent extends Component {
 
     public void directionChange() {
         if (state.getCurrentState() == PATROL) {
-            if (gets("enemyDirection").equals("right")) {
+            if (direction.equals("right")) {
                 physics.setVelocityX(-20);
-                set("enemyDirection", "left");
+                direction = "left";
             } else  {
                 physics.setVelocityX(20);
-                set("enemyDirection", "right");
+                direction = "right";
             }
         }
     }
@@ -173,15 +164,15 @@ public class EnemyAIComponent extends Component {
     }
 
     private void edgeDetection(Entity enemy) {
-        int end = 60;
         RaycastResult result = getPhysicsWorld().raycast(enemy.getCenter(),
-                new Point2D(enemy.getX()-48 * enemy.getScaleX(), enemy.getY()-48));
+                new Point2D(enemy.getX()+(48 * (enemy.getScaleX() * -1)), enemy.getY()+96));
 
-        if (result.getPoint().isPresent()){}
-//            System.out.println(result.getEntity().f);
-
-//        result.getPoint().ifPresent(p -> {
-//            System.out.println("hit something");
-//    });
+        if (result.getEntity().isEmpty()){
+           if (direction.equals("left")) {
+               direction = "right";
+           } else {
+               direction = "left";
+           }
+        }
     }
 }

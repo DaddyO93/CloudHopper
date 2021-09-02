@@ -84,7 +84,7 @@ public class HeartControl extends Component {
         getNotificationService().pushNotification("You are fully healed.");
     }
 
-    public void addLife() {
+    public void addHeart() {
     }
 
     public void healDamage() {

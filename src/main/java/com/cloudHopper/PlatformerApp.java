@@ -41,7 +41,7 @@ public class PlatformerApp extends GameApplication {
         vars.put("score", 0);
         vars.put("keys", 0);
         vars.put("stars", 0);
-        vars.put("hearts", 1);
+        vars.put("hearts", 2);
         vars.put("invulnerable", false);
         vars.put("keyDialogue", false);
         vars.put("starDialogue", false);
@@ -52,7 +52,6 @@ public class PlatformerApp extends GameApplication {
         vars.put("playerJumpDistance", 608);
         vars.put("pushingBlock", false);
         vars.put("enemyMovementSpeed", 100);
-        vars.put("enemyDirection", "right");
         vars.put("stoneMovementSpeed", 700);
         vars.put("startPosition", startPosition);
         vars.put("maxY", 20 * 64);
@@ -103,6 +102,7 @@ public class PlatformerApp extends GameApplication {
         });
         onCollisionBegin(EntityType.ENEMY, EntityType.BLOCK, (enemy, block) -> {
             enemy.getComponent(EnemyAIComponent.class).blockOnHead(enemy, block);
+            enemy.getComponent(EnemyAIComponent.class).directionChange();
         });
 
         onCollision(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
