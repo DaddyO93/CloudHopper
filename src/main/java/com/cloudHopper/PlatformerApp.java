@@ -4,11 +4,11 @@ import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
-import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
+import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -60,11 +60,14 @@ public class PlatformerApp extends GameApplication {
 
     @Override
     protected void initInput() {
-        onKey(KeyCode.A, () -> player.getComponent(PlayerControl.class).left(player));
-        onKey(KeyCode.D, () -> player.getComponent(PlayerControl.class).right(player));
+        onKey(KeyCode.A, () -> player.getComponent(PlayerControl.class).left());
+        onKey(KeyCode.D, () -> player.getComponent(PlayerControl.class).right());
         onKeyDown(KeyCode.SPACE, () -> player.getComponent(PlayerControl.class).jumpTest());
         onKeyDown(KeyCode.W, () -> player.getComponent(PlayerControl.class).attack(player));
-//        onKeyDown(KeyCode.S, () -> player.getComponent(PlayerControl.class).squat());
+        onKey(KeyCode.S, () -> {
+            set("pushingBlock", true);
+            player.getComponent(PlayerControl.class).moveBlock();
+        });
     }
 
     @Override
@@ -95,7 +98,7 @@ public class PlatformerApp extends GameApplication {
 
         onCollisionBegin(EntityType.ENEMY, EntityType.PLAYER, (enemy, player) -> {
             HeartControl.takeDamage();
-            player.getComponent(PlayerControl.class).invulnerabilityTest(player);
+            player.getComponent(PlayerControl.class).invulnerable();
         });
         onCollisionBegin(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
             enemy.getComponent(EnemyAIComponent.class).directionChange();
@@ -106,10 +109,8 @@ public class PlatformerApp extends GameApplication {
         });
 
         onCollision(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
-            set("pushingBlock", true);
-        });
-        onCollisionBegin(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
-            player.getComponent(PlayerControl.class).wallTest(player, wall);
+            block.getComponent(BlockControl.class).message();
+            player.getComponent(PlayerControl.class).touchingBlock = block;
         });
         onCollisionBegin(EntityType.PLAYER, EntityType.KEY, (player, key) -> {
             key.getComponent(KeyControl.class).spawnDisappearingKey(key);

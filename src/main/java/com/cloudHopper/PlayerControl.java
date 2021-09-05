@@ -3,6 +3,8 @@ package com.cloudHopper;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.entity.state.EntityState;
+import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
@@ -19,9 +21,11 @@ public class PlayerControl extends Component {
     private PhysicsComponent physics;
     private Integer movementSpeed = geti("playerMovementSpeed");
     private Integer jumpDistance = geti("playerJumpDistance");
-    private LocalTimer invulnerability;
-    private Boolean invulnerabilityTimer = false;
+    private LocalTimer invulnerabilityTimer;
     private LocalTimer attackTimer;
+    private StateComponent state;
+    public Entity touchingBlock;
+    private Double facing;
 
     private Point2D startPosition = geto("startPosition");
 
@@ -73,11 +77,13 @@ public class PlayerControl extends Component {
     public void onAdded() {
         attackTimer = newLocalTimer();
         entity.getViewComponent().addChild(texture);
+        state = entity.getComponent(StateComponent.class);
+        state.changeState(NORMAL);
     }
 
     @Override
     public void onUpdate(double tpf) {
-        if (getb("pushingBlock") && physics.isMoving()) {
+        if (getb("pushingBlock") && touchingBlock != null && physics.isMovingX()) {
             if (texture.getAnimationChannel() != animationPush) {
                 texture.loopAnimationChannel(animationPush);
             }
@@ -90,48 +96,104 @@ public class PlayerControl extends Component {
                 texture.loopAnimationChannel(animationWalk);
             }
         } else {if (texture.getAnimationChannel() != animationIde) {
-                texture.loopAnimationChannel(animationIde);
-            }
+            texture.loopAnimationChannel(animationIde);
         }
+        }
+
+//        if (getb("pushingBlock") && physics.isMoving()) {
+//            if (texture.getAnimationChannel() != animationPush) {
+//                texture.loopAnimationChannel(animationPush);
+//            }
+//        } else if (physics.isMovingY()) {
+//            if (texture.getAnimationChannel() != animationJump) {
+//                texture.loopAnimationChannel(animationJump);
+//            }
+//        } else if (physics.isMovingX()) {
+//            if (texture.getAnimationChannel() != animationWalk) {
+//                texture.loopAnimationChannel(animationWalk);
+//            }
+//        } else {if (texture.getAnimationChannel() != animationIde) {
+//                texture.loopAnimationChannel(animationIde);
+//            }
+//        }
 
         if (entity.getY() > geti("maxY")) {
             HeartControl.takeDamage();
-//            heartsTest();
             restart(entity);
         }
-
-        if (invulnerabilityTimer)
-            invulnerabilityTest(entity);
-
-        set("pushingBlock", false);
     }
 
-    public void left(Entity player) {
-        if (player.getX()>40) {
+    private final EntityState NORMAL = new EntityState("NORMAL") {
+        @Override
+        public void onEntering() {
+//            set("pushingBlock", false);
+            touchingBlock = null;
+        }
+    };
+
+    private final EntityState INVULNERABLE = new EntityState("INVULNERABLE") {
+        @Override
+        public void onEntering() {
+            invulnerabilityTimer = newLocalTimer();
+            invulnerabilityTimer.capture();
+            entity.getComponent(CollidableComponent.class).addIgnoredType(EntityType.ENEMY);
+            knockBack(entity);
+        }
+
+        @Override
+        public void onUpdate(double tpf) {
+            if (invulnerabilityTimer.elapsed(Duration.seconds(5))) {
+                entity.getComponent(CollidableComponent.class).removeIgnoredType(EntityType.ENEMY);
+                state.changeState(NORMAL);
+            }
+        }
+    };
+
+    private final EntityState PULLING = new EntityState("PULLING") {
+        @Override
+        public void onEntering() {
+            if (touchingBlock != null && getb("pushingBlock")){
+                facing = entity.getScaleX();
+                entity.setScaleX(facing);
+            }
+        }
+
+        @Override
+        public void onUpdate(double tpf) {
+            if (touchingBlock != null){
+                entity.setScaleX(facing);
+                touchingBlock.getComponent(BlockControl.class).moveBlock(entity);
+            }
+            state.changeState(NORMAL);
+        }
+    };
+
+    public void left() {
+        if (entity.getX()>40) {
             move(-movementSpeed);
-            player.setScaleX(-1);
+            entity.setScaleX(-1);
         } else {
             move(movementSpeed);
         }
     }
 
-    public void right(Entity player) {
-        if (player.getX()<(geti("maxX")-40)) {
+    public void right() {
+        if (entity.getX()<(geti("maxX")-40)) {
             move(movementSpeed);
-            player.setScaleX(1);
+            entity.setScaleX(1);
         } else {
             move(-movementSpeed);
         }
     }
 
     public void jumpTest() {
-        if (!physics.isMovingY()){
+        if (!physics.isMovingY() && state.getCurrentState() != PULLING){
             jump(jumpDistance);
         }
     }
 
     private void jump(int distance) {
-        physics.setVelocityY(-distance);
+            physics.setVelocityY(-distance);
     }
 
     public void attack(Entity player) {
@@ -139,6 +201,10 @@ public class PlayerControl extends Component {
             spawn("stone", player.getX() + 20, player.getY());
             attackTimer.capture();
         }
+    }
+
+    public void moveBlock() {
+        state.changeState(PULLING);
     }
 
     public void move(int distance) {
@@ -149,21 +215,8 @@ public class PlayerControl extends Component {
         player.getComponent(PhysicsComponent.class).overwritePosition(startPosition);
     }
 
-    public void invulnerabilityTest(Entity player) {
-        if (!getb("invulnerable")) {
-            invulnerability = newLocalTimer();
-            invulnerability.capture();
-            player.getComponent(CollidableComponent.class).addIgnoredType(EntityType.ENEMY);
-            set("invulnerable", true);
-            invulnerabilityTimer = true;
-            knockBack(player);
-        } else {
-            if (invulnerability.elapsed(Duration.seconds(4))) {
-                player.getComponent(CollidableComponent.class).removeIgnoredType(EntityType.ENEMY);
-                set("invulnerable", false);
-                invulnerabilityTimer = false;
-            }
-        }
+    public void invulnerable() {
+        state.changeState(INVULNERABLE);
     }
 
     private void knockBack(Entity player) {

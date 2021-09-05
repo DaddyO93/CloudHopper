@@ -59,9 +59,10 @@ public class GameEntityFactory implements EntityFactory {
 
         return entityBuilder(data)
                 .type(PLAYER)
-//                .bbox(new HitBox(BoundingShape.box(50, 100)))   //  current width/height of sprite
                 .bbox(new HitBox(BoundingShape.box(40, 64)))   //  current width/height of sprite
                 .with(physics)
+                .with(new CollidableComponent(true))
+                .with(new StateComponent())
                 .with(new PlayerControl())
                 .collidable()
                 .build();
@@ -154,7 +155,7 @@ public class GameEntityFactory implements EntityFactory {
     @Spawns("block")
     public Entity newBlock(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
-        physics.setFixtureDef(new FixtureDef().density(18f));
+        physics.setFixtureDef(new FixtureDef().density(20f));
         physics.setBodyType(BodyType.DYNAMIC);
 
         return entityBuilder(data)
@@ -163,6 +164,15 @@ public class GameEntityFactory implements EntityFactory {
                 .with(physics)
                 .with(new BlockControl())
                 .with(new CollidableComponent(true))
+                .build();
+    }
+
+    @Spawns("blockNotification")
+    public Entity newBlockNotification(SpawnData data) {
+        return entityBuilder(data)
+                .type(BLOCKNOTIFICATION)
+                .bbox(new HitBox(BoundingShape.box(48, 48)))
+                .collidable()
                 .build();
     }
 
@@ -252,7 +262,6 @@ public class GameEntityFactory implements EntityFactory {
     public Entity newHeart(SpawnData data) {
         return entityBuilder(data)
                 .type(HEART)
-                .view("hearts.png")
                 .with(new HealthIntComponent(2))
                 .with(new HeartControl())
                 .build();

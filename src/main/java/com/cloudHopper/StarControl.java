@@ -35,7 +35,7 @@ public class StarControl extends Component {
     }
 
     public void message() {
-        getNotificationService().pushNotification("Collect stars to earn hearts.");
+        getNotificationService().pushNotification("Collect stars to heal hearts.");
         set("starDialogue", true);
     }
 

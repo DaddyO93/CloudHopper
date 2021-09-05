@@ -110,7 +110,6 @@ public class EnemyAIComponent extends Component {
 
         @Override
         protected void onUpdate(double tpf) {
-
             if (jumpTimer.elapsed(Duration.seconds(1.5))) {
                 jump();
                 jumpTimer.capture();

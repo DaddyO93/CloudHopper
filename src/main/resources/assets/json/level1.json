@@ -1753,6 +1753,18 @@
                  "width":0,
                  "x":10021,
                  "y":895
+                }, 
+                {
+                 "height":0,
+                 "id":251,
+                 "name":"block",
+                 "point":true,
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":0,
+                 "x":353,
+                 "y":1024
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1761,7 +1773,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":250,
+ "nextobjectid":252,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.1",
