@@ -6,15 +6,18 @@ import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 public class ButtonComponent extends Component {
     private StateComponent state;
     private AnimatedTexture texture;
     private AnimationChannel pressedButton, inactiveButton;
     public Entity block;
+    private boolean blockDispensed = false;
 
     public ButtonComponent() {
         pressedButton = new AnimationChannel(
@@ -50,8 +53,15 @@ public class ButtonComponent extends Component {
             if (block != null) {
                 if (texture.getAnimationChannel() != pressedButton)
                     texture.loopAnimationChannel(pressedButton);
-                if (!entity.isColliding(block))
+                if (!blockDispensed) {
+                    spawn("block", new Point2D(11100, 64));
+                    blockDispensed = true;
+                }
+
+                if (!entity.isColliding(block)) {
                     state.changeState(INACTIVE);
+                    blockDispensed = false;
+                }
             }
         }
     };

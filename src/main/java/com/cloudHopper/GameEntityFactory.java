@@ -59,7 +59,7 @@ public class GameEntityFactory implements EntityFactory {
 
         return entityBuilder(data)
                 .type(PLAYER)
-                .bbox(new HitBox(BoundingShape.box(40, 62)))   //  current width/height of sprite
+                .bbox(new HitBox(BoundingShape.box(40, 64)))   //  current width/height of sprite
                 .with(physics)
                 .with(new CollidableComponent(true))
                 .with(new StateComponent())

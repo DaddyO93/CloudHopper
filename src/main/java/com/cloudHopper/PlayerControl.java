@@ -93,7 +93,7 @@ public class PlayerControl extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        if ((getb("pushingBlock") || (touchingBlock != null && entity.distance(touchingBlock) < 70)) && physics.isMovingX()) {
+        if ((getb("pushingBlock") || (touchingBlock != null && entity.distanceBBox(touchingBlock) < 10)) && physics.isMovingX()) {
             if (texture.getAnimationChannel() != animationPush) {
                 texture.loopAnimationChannel(animationPush);
             }
@@ -110,9 +110,10 @@ public class PlayerControl extends Component {
             if (texture.getAnimationChannel() != animationWalk) {
                 texture.loopAnimationChannel(animationWalk);
             }
-        } else {if (texture.getAnimationChannel() != animationIde) {
+        } else {
+            if (texture.getAnimationChannel() != animationIde) {
             texture.loopAnimationChannel(animationIde);
-        }
+            }
         }
 
         if (entity.getY() > geti("maxY")) {
@@ -156,7 +157,9 @@ public class PlayerControl extends Component {
 
         @Override
         public void onUpdate(double tpf) {
-            if (touchingBlock != null && getb("pushingBlock") && entity.distance(touchingBlock) < 70) {
+            if (touchingBlock != null && getb("pushingBlock") && entity.distanceBBox(touchingBlock) < 10) {
+                if (touchingBlock.getY() < entity.getY())
+                    touchingBlock.translateX(20);
                 entity.setScaleX(facing);
                 movementSpeed = 120;
                 double pushingSpeed = entity.getComponent(PhysicsComponent.class).getVelocityX();

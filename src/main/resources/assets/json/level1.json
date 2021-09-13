@@ -433,18 +433,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":260,
-                 "name":"block",
-                 "point":true,
-                 "rotation":0,
-                 "type":"block",
-                 "visible":true,
-                 "width":0,
-                 "x":2180,
-                 "y":689
-                }, 
-                {
-                 "height":0,
                  "id":126,
                  "name":"block",
                  "point":true,
@@ -1767,18 +1755,6 @@
                  "y":895
                 }, 
                 {
-                 "height":0,
-                 "id":252,
-                 "name":"button",
-                 "point":true,
-                 "rotation":0,
-                 "type":"button",
-                 "visible":true,
-                 "width":0,
-                 "x":11291,
-                 "y":1023
-                }, 
-                {
                  "height":7,
                  "id":254,
                  "name":"ground",
@@ -1808,8 +1784,8 @@
                  "type":"wall",
                  "visible":true,
                  "width":9,
-                 "x":11903.5,
-                 "y":1038.8335
+                 "x":11906.5,
+                 "y":1034.8335
                 }, 
                 {
                  "height":7,
@@ -1824,26 +1800,100 @@
                 }, 
                 {
                  "height":63,
-                 "id":259,
+                 "id":262,
                  "name":"button",
+                 "properties":[
+                        {
+                         "name":"buttonNumber",
+                         "type":"int",
+                         "value":1
+                        }],
                  "rotation":0,
                  "type":"button",
                  "visible":true,
                  "width":64,
-                 "x":447,
-                 "y":1024
+                 "x":11264,
+                 "y":1025.5
+                }, 
+                {
+                 "height":63,
+                 "id":263,
+                 "name":"button",
+                 "properties":[
+                        {
+                         "name":"buttonNumber",
+                         "type":"int",
+                         "value":2
+                        }],
+                 "rotation":0,
+                 "type":"button",
+                 "visible":true,
+                 "width":64,
+                 "x":11393,
+                 "y":1025.5
+                }, 
+                {
+                 "height":63,
+                 "id":264,
+                 "name":"button",
+                 "properties":[
+                        {
+                         "name":"buttonNumber",
+                         "type":"int",
+                         "value":3
+                        }],
+                 "rotation":0,
+                 "type":"button",
+                 "visible":true,
+                 "width":64,
+                 "x":11521,
+                 "y":1024.5
+                }, 
+                {
+                 "height":63,
+                 "id":265,
+                 "name":"button",
+                 "properties":[
+                        {
+                         "name":"buttonNumber",
+                         "type":"int",
+                         "value":4
+                        }],
+                 "rotation":0,
+                 "type":"button",
+                 "visible":true,
+                 "width":64,
+                 "x":11649,
+                 "y":1025.5
+                }, 
+                {
+                 "height":63,
+                 "id":266,
+                 "name":"button",
+                 "properties":[
+                        {
+                         "name":"buttonNumber",
+                         "type":"int",
+                         "value":5
+                        }],
+                 "rotation":0,
+                 "type":"button",
+                 "visible":true,
+                 "width":64,
+                 "x":11777,
+                 "y":1026.5
                 }, 
                 {
                  "height":0,
-                 "id":261,
+                 "id":267,
                  "name":"block",
                  "point":true,
                  "rotation":0,
                  "type":"block",
                  "visible":true,
                  "width":0,
-                 "x":594,
-                 "y":1021
+                 "x":11107,
+                 "y":894
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1852,7 +1902,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":262,
+ "nextobjectid":268,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.1",
