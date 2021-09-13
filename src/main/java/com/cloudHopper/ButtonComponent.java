@@ -1,5 +1,6 @@
 package com.cloudHopper;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
@@ -13,25 +14,26 @@ public class ButtonComponent extends Component {
     private StateComponent state;
     private AnimatedTexture texture;
     private AnimationChannel pressedButton, inactiveButton;
+    public Entity block;
 
     public ButtonComponent() {
         pressedButton = new AnimationChannel(
-                image("tiles_packed.png"),
-                20,
-                128,
-                128,
+                image("button_pressed.png"),
+                1,
+                64,
+                64,
                 Duration.seconds(1),
-                149,
-                149);
+                0,
+                0);
 
         inactiveButton = new AnimationChannel(
-                image("tiles_packed.png"),
-                20,
-                128,
-                128,
+                image("button.png"),
+                1,
+                64,
+                64,
                 Duration.seconds(1),
-                148,
-                148);
+                0,
+                0);
         texture = new AnimatedTexture(inactiveButton).loop();
     }
 
@@ -44,15 +46,22 @@ public class ButtonComponent extends Component {
 
     private final EntityState ACTIVE = new EntityState("ACTIVE") {
         @Override
-        public void onEntering() {
-            texture.loopAnimationChannel(pressedButton);
+        public void onUpdate(double tpf) {
+            if (block != null) {
+                if (texture.getAnimationChannel() != pressedButton)
+                    texture.loopAnimationChannel(pressedButton);
+                if (!entity.isColliding(block))
+                    state.changeState(INACTIVE);
+            }
         }
     };
 
     private final EntityState INACTIVE = new EntityState("INACTIVE") {
         @Override
-        public void onEntering() {
-            texture.loopAnimationChannel(inactiveButton);
+        public void onUpdate(double tpf) {
+            if (texture.getAnimationChannel() != inactiveButton)
+                texture.loopAnimationChannel(inactiveButton);
+            block = null;
         }
     };
 

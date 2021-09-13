@@ -18,9 +18,7 @@ public class BlockControl extends Component {
         }
     }
 
-    public void moveBlock(Entity player) {
-        entity.getComponent(PhysicsComponent.class).setVelocityX(player.getComponent(PhysicsComponent.class).getVelocityX());
-//        Vec2 playerMovement = new Vec2(player.getComponent(PhysicsComponent.class).getVelocityX() * player.getScaleX(), 0);
-//        entity.getComponent(PhysicsComponent.class).applyBodyForceToCenter(playerMovement);
+    public void moveBlock(Entity player, Double pushingSpeed) {
+        entity.getComponent(PhysicsComponent.class).setVelocityX(pushingSpeed);
     }
 }

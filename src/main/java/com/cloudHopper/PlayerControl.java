@@ -19,7 +19,8 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 public class PlayerControl extends Component {
 
     private PhysicsComponent physics;
-    private Integer movementSpeed = geti("playerMovementSpeed");
+    private final double movementSpeedFinal = geti("playerMovementSpeed");
+    private double movementSpeed = movementSpeedFinal;
     private Integer jumpDistance = geti("playerJumpDistance");
     private LocalTimer invulnerabilityTimer;
     private LocalTimer attackTimer;
@@ -30,7 +31,7 @@ public class PlayerControl extends Component {
     private Point2D startPosition = geto("startPosition");
 
     private AnimatedTexture texture;
-    private AnimationChannel animationIde, animationWalk, animationJump, animationPush;
+    private AnimationChannel animationIde, animationWalk, animationJump, animationPush, animationPushIdle;
 
     public PlayerControl() {
         animationIde = new AnimationChannel(
@@ -69,6 +70,15 @@ public class PlayerControl extends Component {
                 0,
                 3);
 
+        animationPushIdle = new AnimationChannel(
+                image("singlePushing.png"),
+                4,
+                60,
+                64,
+                Duration.seconds(.5),
+                3,
+                3);
+
         //  this is the default animation
         texture = new AnimatedTexture(animationIde).loop();
     }
@@ -83,11 +93,16 @@ public class PlayerControl extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        if (getb("pushingBlock") && touchingBlock != null && physics.isMovingX()) {
+        if ((getb("pushingBlock") || (touchingBlock != null && entity.distance(touchingBlock) < 70)) && physics.isMovingX()) {
             if (texture.getAnimationChannel() != animationPush) {
                 texture.loopAnimationChannel(animationPush);
             }
-        } else if (physics.isMovingY()) {
+        } else if (getb("pushingBlock")) {
+            if (texture.getAnimationChannel() != animationPushIdle) {
+                texture.loopAnimationChannel(animationPushIdle);
+            }
+        }
+        else if (physics.isMovingY()) {
             if (texture.getAnimationChannel() != animationJump) {
                 texture.loopAnimationChannel(animationJump);
             }
@@ -100,23 +115,6 @@ public class PlayerControl extends Component {
         }
         }
 
-//        if (getb("pushingBlock") && physics.isMoving()) {
-//            if (texture.getAnimationChannel() != animationPush) {
-//                texture.loopAnimationChannel(animationPush);
-//            }
-//        } else if (physics.isMovingY()) {
-//            if (texture.getAnimationChannel() != animationJump) {
-//                texture.loopAnimationChannel(animationJump);
-//            }
-//        } else if (physics.isMovingX()) {
-//            if (texture.getAnimationChannel() != animationWalk) {
-//                texture.loopAnimationChannel(animationWalk);
-//            }
-//        } else {if (texture.getAnimationChannel() != animationIde) {
-//                texture.loopAnimationChannel(animationIde);
-//            }
-//        }
-
         if (entity.getY() > geti("maxY")) {
             HeartControl.takeDamage();
             restart(entity);
@@ -126,8 +124,9 @@ public class PlayerControl extends Component {
     private final EntityState NORMAL = new EntityState("NORMAL") {
         @Override
         public void onEntering() {
-//            set("pushingBlock", false);
+            set("pushingBlock", false);
             touchingBlock = null;
+            movementSpeed = movementSpeedFinal;
         }
     };
 
@@ -152,37 +151,36 @@ public class PlayerControl extends Component {
     private final EntityState PULLING = new EntityState("PULLING") {
         @Override
         public void onEntering() {
-            if (touchingBlock != null && getb("pushingBlock")){
-                facing = entity.getScaleX();
-                entity.setScaleX(facing);
-            }
+            facing = entity.getScaleX();
         }
 
         @Override
         public void onUpdate(double tpf) {
-            if (touchingBlock != null){
+            if (touchingBlock != null && getb("pushingBlock") && entity.distance(touchingBlock) < 70) {
                 entity.setScaleX(facing);
-                touchingBlock.getComponent(BlockControl.class).moveBlock(entity);
-            }
-            state.changeState(NORMAL);
+                movementSpeed = 120;
+                double pushingSpeed = entity.getComponent(PhysicsComponent.class).getVelocityX();
+                touchingBlock.getComponent(BlockControl.class).moveBlock(entity, pushingSpeed);
+            } else movementSpeed = movementSpeedFinal;
+            if (!getb("pushingBlock")) state.changeState(NORMAL);
         }
     };
 
     public void left() {
         if (entity.getX()>40) {
-            move(-movementSpeed);
+            move((int) -movementSpeed);
             entity.setScaleX(-1);
         } else {
-            move(movementSpeed);
+            move((int) movementSpeed);
         }
     }
 
     public void right() {
         if (entity.getX()<(geti("maxX")-40)) {
-            move(movementSpeed);
+            move((int) movementSpeed);
             entity.setScaleX(1);
         } else {
-            move(-movementSpeed);
+            move((int) -movementSpeed);
         }
     }
 
@@ -222,5 +220,12 @@ public class PlayerControl extends Component {
     private void knockBack(Entity player) {
         move(400 * (int) (player.getScaleX()*-1));
         jump(600);
+    }
+
+    public void pullingMessage() {
+        if (getb("pushingBlock"))
+            getNotificationService().pushNotification("Ready to pull a block");
+        else
+            getNotificationService().pushNotification("Not ready to pull a block");
     }
 }

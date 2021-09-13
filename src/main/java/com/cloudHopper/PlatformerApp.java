@@ -64,8 +64,15 @@ public class PlatformerApp extends GameApplication {
         onKey(KeyCode.D, () -> player.getComponent(PlayerControl.class).right());
         onKeyDown(KeyCode.SPACE, () -> player.getComponent(PlayerControl.class).jumpTest());
         onKeyDown(KeyCode.W, () -> player.getComponent(PlayerControl.class).attack(player));
-        onKey(KeyCode.S, () -> {
-            set("pushingBlock", true);
+        onKeyDown(KeyCode.S, () -> {
+            if (getb("pushingBlock")) {
+                set("pushingBlock", false);
+            }
+            else
+            {
+                set("pushingBlock", true);
+            }
+            player.getComponent(PlayerControl.class).pullingMessage();
             player.getComponent(PlayerControl.class).moveBlock();
         });
     }
@@ -108,7 +115,7 @@ public class PlatformerApp extends GameApplication {
             enemy.getComponent(EnemyAIComponent.class).directionChange();
         });
 
-        onCollision(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
+        onCollisionBegin(EntityType.PLAYER, EntityType.BLOCK, (player, block) -> {
             block.getComponent(BlockControl.class).message();
             player.getComponent(PlayerControl.class).touchingBlock = block;
         });
@@ -123,14 +130,15 @@ public class PlatformerApp extends GameApplication {
         onCollisionBegin(EntityType.PLAYER, EntityType.STAR, (player, star) -> {
             star.getComponent(StarControl.class).spawnDisappearingStar(star);
         });
-
+        onCollision(EntityType.BLOCK, EntityType.BUTTON, (block, button) -> {
+            button.getComponent(ButtonComponent.class).activateButton();
+            button.getComponent(ButtonComponent.class).block = block;
+        });
 //        onCollisionBegin(EntityType.PLAYER, EntityType.FLAG, (player, flag) -> {
 //            getDialogService().showMessageBox("Level Complete!");
 //        });
 
-//        onCollisionBegin(EntityType.PLAYER, EntityType.BUTTON, (player, button) -> {
-//            button.getComponent(ButtonComponent.class).activateButton();
-//        });
+
 
         onCollision(EntityType.STONE, EntityType.GROUND, (stone, ground) -> stone.removeFromWorld());
         onCollision(EntityType.STONE, EntityType.WALL, (stone, wall) -> stone.removeFromWorld());
