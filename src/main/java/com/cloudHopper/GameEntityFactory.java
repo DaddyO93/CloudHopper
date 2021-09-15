@@ -267,6 +267,17 @@ public class GameEntityFactory implements EntityFactory {
                 .build();
     }
 
+    @Spawns("lever")
+    public Entity newLever(SpawnData data) {
+        return entityBuilder(data)
+                .type(LEVER)
+                .bbox(new HitBox(BoundingShape.box(64, 64)))
+                .with(new StateComponent())
+                .with(new LeverControl())
+                .collidable()
+                .build();
+    }
+
 //    @Spawns("flag")
 //    public Entity newFlag(SpawnData data) {
 //        return entityBuilder(data)

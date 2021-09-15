@@ -26,6 +26,7 @@ public class PlayerControl extends Component {
     private LocalTimer attackTimer;
     private StateComponent state;
     public Entity touchingBlock;
+    public Entity lever;
     private Double facing;
 
     private Point2D startPosition = geto("startPosition");
@@ -93,7 +94,7 @@ public class PlayerControl extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        if ((getb("pushingBlock") || (touchingBlock != null && entity.distanceBBox(touchingBlock) < 10)) && physics.isMovingX()) {
+        if ((getb("pushingBlock") || (touchingBlock != null && entity.distanceBBox(touchingBlock) < 10)) && physics.isMovingX() && touchingBlock.getY() == entity.getY()) {
             if (texture.getAnimationChannel() != animationPush) {
                 texture.loopAnimationChannel(animationPush);
             }
@@ -152,7 +153,7 @@ public class PlayerControl extends Component {
     private final EntityState PULLING = new EntityState("PULLING") {
         @Override
         public void onUpdate(double tpf) {
-            if (touchingBlock != null && getb("pushingBlock")) {
+            if (touchingBlock != null && getb("pushingBlock") && touchingBlock.getY() == entity.getY()) {
                 determineFacing();
                 if (entity.distanceBBox(touchingBlock) < 10) {
                     if (touchingBlock.getY() < entity.getY())
@@ -200,6 +201,12 @@ public class PlayerControl extends Component {
         if (attackTimer.elapsed(Duration.seconds(.3))) {
             spawn("stone", player.getX() + 20, player.getY());
             attackTimer.capture();
+        }
+    }
+
+    public void pullLever() {
+        if (lever != null) {
+            lever.getComponent(LeverControl.class).activateLever();
         }
     }
 

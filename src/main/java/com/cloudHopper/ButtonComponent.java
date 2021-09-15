@@ -6,19 +6,17 @@ import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
-import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 public class ButtonComponent extends Component {
     private StateComponent state;
     private AnimatedTexture texture;
     private AnimationChannel activeButton, inactiveButton;
     public Entity block;
-    private boolean blockDispensed = false;
-    private ButtonPuzzle buttonPuzzle = new ButtonPuzzle();
+//    private boolean blockDispensed = false;
+    private final ButtonPuzzle buttonPuzzle = new ButtonPuzzle();
 
     public ButtonComponent() {
         activeButton = new AnimationChannel(
@@ -54,10 +52,10 @@ public class ButtonComponent extends Component {
             entity.getProperties().setValue("pressed", true);
             buttonPuzzle.puzzleTest(entity);
 
-            if (!blockDispensed) {
-                spawn("block", new Point2D(11100, 64));
-                blockDispensed = true;
-            }
+//            if (!blockDispensed) {
+////                spawn("block", new Point2D(10974, 64));
+//                blockDispensed = true;
+//            }
         }
 
         @Override
@@ -76,7 +74,7 @@ public class ButtonComponent extends Component {
     private final EntityState INACTIVE = new EntityState("INACTIVE") {
         @Override
         public void onEntering() {
-            blockDispensed = false;
+//            blockDispensed = false;
             block = null;
             entity.getProperties().setValue("pressed", false);
             buttonPuzzle.puzzleTest(entity);

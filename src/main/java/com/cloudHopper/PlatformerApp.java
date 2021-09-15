@@ -47,6 +47,7 @@ public class PlatformerApp extends GameApplication {
         vars.put("blockDialogue", false);
         vars.put("revealedPlatformDialogue", false);
         vars.put("enemyDialogue", false);
+        vars.put("leverDialogue", false);
         vars.put("playerMovementSpeed", 256);
         vars.put("playerJumpDistance", 608);
         vars.put("pushingBlock", false);
@@ -73,6 +74,7 @@ public class PlatformerApp extends GameApplication {
             }
             player.getComponent(PlayerControl.class).moveBlock();
         });
+        onKey(KeyCode.E, () -> player.getComponent(PlayerControl.class).pullLever());
     }
 
     @Override
@@ -128,15 +130,18 @@ public class PlatformerApp extends GameApplication {
         onCollisionBegin(EntityType.PLAYER, EntityType.STAR, (player, star) -> {
             star.getComponent(StarControl.class).spawnDisappearingStar(star);
         });
-        onCollision(EntityType.BLOCK, EntityType.BUTTON, (block, button) -> {
-            button.getComponent(ButtonComponent.class).activateButton();
-            button.getComponent(ButtonComponent.class).block = block;
+        onCollisionBegin(EntityType.PLAYER, EntityType.LEVER, (player, lever) -> {
+            lever.getComponent(LeverControl.class).message();
+            player.getComponent(PlayerControl.class).lever = lever;
         });
 //        onCollisionBegin(EntityType.PLAYER, EntityType.FLAG, (player, flag) -> {
 //            getDialogService().showMessageBox("Level Complete!");
 //        });
 
-
+        onCollision(EntityType.BLOCK, EntityType.BUTTON, (block, button) -> {
+            button.getComponent(ButtonComponent.class).activateButton();
+            button.getComponent(ButtonComponent.class).block = block;
+        });
 
         onCollision(EntityType.STONE, EntityType.GROUND, (stone, ground) -> stone.removeFromWorld());
         onCollision(EntityType.STONE, EntityType.WALL, (stone, wall) -> stone.removeFromWorld());

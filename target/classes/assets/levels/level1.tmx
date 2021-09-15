@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.1" orientation="orthogonal" renderorder="right-down" width="320" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="274">
+<map version="1.5" tiledversion="1.7.1" orientation="orthogonal" renderorder="right-down" width="320" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="275">
  <editorsettings>
   <export target="../json/level1.json" format="json"/>
  </editorsettings>
@@ -201,7 +201,7 @@
   <object id="189" name="key" type="key" x="869" y="610">
    <point/>
   </object>
-  <object id="190" name="key" type="key" x="294" y="1021">
+  <object id="190" name="key" type="key" x="298" y="1021">
    <point/>
   </object>
   <object id="191" name="key" type="key" x="3266" y="622">
@@ -294,7 +294,7 @@
   <object id="229" name="enemy" type="enemy" x="8928" y="704">
    <point/>
   </object>
-  <object id="230" name="enemy" type="enemy" x="10982" y="893">
+  <object id="230" name="enemy" type="enemy" x="10917" y="893">
    <point/>
   </object>
   <object id="231" name="star" type="star" x="797" y="1088">
@@ -383,34 +383,6 @@
     <property name="buttonNumber" type="int" value="5"/>
    </properties>
   </object>
-  <object id="267" name="block" type="block" x="11107" y="894">
-   <point/>
-  </object>
-  <object id="268" name="button" type="button" x="227" y="1023.5" width="64" height="63">
-   <properties>
-    <property name="buttonNumber" type="int" value="1"/>
-    <property name="pressed" type="bool" value="false"/>
-   </properties>
-  </object>
-  <object id="269" name="block" type="block" x="602" y="1018">
-   <point/>
-  </object>
-  <object id="270" name="button" type="button" x="350" y="1026.5" width="64" height="63">
-   <properties>
-    <property name="buttonNumber" type="int" value="2"/>
-    <property name="pressed" type="bool" value="false"/>
-   </properties>
-  </object>
-  <object id="271" name="button" type="button" x="463" y="1023.5" width="64" height="63">
-   <properties>
-    <property name="buttonNumber" type="int" value="3"/>
-   </properties>
-  </object>
-  <object id="272" name="block" type="block" x="484" y="617">
-   <point/>
-  </object>
-  <object id="273" name="block" type="block" x="51" y="1024">
-   <point/>
-  </object>
+  <object id="274" name="lever" type="lever" x="11136" y="896" width="64" height="64"/>
  </objectgroup>
 </map>
