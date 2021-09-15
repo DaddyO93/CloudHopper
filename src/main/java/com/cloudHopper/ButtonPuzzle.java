@@ -4,13 +4,12 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 
 public class ButtonPuzzle extends Component {
-    public static boolean button1 = false;
-    public static boolean button2 = false;
+    private boolean button1 = false;
+    private boolean button2 = false;
     private boolean button3 = false;
-    private boolean button4 = false;
     private boolean button5 = false;
 
-    public static void puzzleTest(Entity button) {
+    public void puzzleTest(Entity button) {
         if (button.getProperties().getInt("buttonNumber") == 1 && button.getProperties().getBoolean("pressed")) {
             button1 = true;
         } else if (button.getProperties().getInt("buttonNumber") == 1 && !button.getProperties().getBoolean("pressed")) {
@@ -23,9 +22,21 @@ public class ButtonPuzzle extends Component {
             button2 = false;
         }
 
-        if (button1 && button2) {
+        if (button.getProperties().getInt("buttonNumber") == 3 && button.getProperties().getBoolean("pressed")) {
+            button3 = true;
+        } else if (button.getProperties().getInt("buttonNumber") == 3 && !button.getProperties().getBoolean("pressed")) {
+            button3 = false;
+        }
+
+        if (button.getProperties().getInt("buttonNumber") == 5 && button.getProperties().getBoolean("pressed")) {
+            button5 = true;
+        } else if (button.getProperties().getInt("buttonNumber") == 5 && !button.getProperties().getBoolean("pressed")) {
+            button5 = false;
+        }
+
+        if (button1 && button2 && button3 && button5) {
             System.out.println("Success!");
-        } else{
+        } else {
             System.out.println("Fail!");
         }
     }

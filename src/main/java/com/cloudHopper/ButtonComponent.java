@@ -52,7 +52,7 @@ public class ButtonComponent extends Component {
         @Override
         public void onEntering() {
             entity.getProperties().setValue("pressed", true);
-            ButtonPuzzle.puzzleTest(entity);
+            buttonPuzzle.puzzleTest(entity);
 
             if (!blockDispensed) {
                 spawn("block", new Point2D(11100, 64));
@@ -79,7 +79,7 @@ public class ButtonComponent extends Component {
             blockDispensed = false;
             block = null;
             entity.getProperties().setValue("pressed", false);
-            ButtonPuzzle.puzzleTest(entity);
+            buttonPuzzle.puzzleTest(entity);
         }
 
         @Override
@@ -91,21 +91,5 @@ public class ButtonComponent extends Component {
 
     public void activateButton() {
         state.changeState(ACTIVE);
-//        puzzleTest();
     }
-
-//    private void puzzleTest() {
-////        System.out.println(entity.getProperties().getInt("buttonNumber"));
-//        if (entity.getProperties().getInt("buttonNumber") == 1 && !button1) {
-////            System.out.println(entity.getProperties().getInt("buttonNumber"));
-//            button1 = true;
-//        } else if (entity.getProperties().getInt("buttonNumber") == 2 && !button2) {
-////            System.out.println(entity.getProperties().getInt("buttonNumber"));
-//            button2 = true;
-//        } else if (button1 && button2) {
-//            System.out.println("Success!");
-//        }
-//        System.out.println(entity.getProperties().getInt("buttonNumber"));
-////        System.out.println(button2 + " button2");
-//    }
 }

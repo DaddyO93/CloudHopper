@@ -163,8 +163,10 @@ public class PlayerControl extends Component {
                 entity.setScaleX(facing);
                 movementSpeed = 120;
                 double pushingSpeed = entity.getComponent(PhysicsComponent.class).getVelocityX();
-                touchingBlock.getComponent(BlockControl.class).moveBlock(entity, pushingSpeed);
-            } else movementSpeed = movementSpeedFinal;
+                touchingBlock.getComponent(BlockControl.class).moveBlock(pushingSpeed);
+            } else if (touchingBlock != null && entity.distanceBBox(touchingBlock) > 10) {
+                state.changeState(NORMAL);
+            }
             if (!getb("pushingBlock")) state.changeState(NORMAL);
         }
     };
@@ -188,7 +190,7 @@ public class PlayerControl extends Component {
     }
 
     public void jumpTest() {
-        if (!physics.isMovingY() && state.getCurrentState() != PULLING){
+        if (!physics.isMovingY() && (touchingBlock != null && entity.isColliding(touchingBlock))){
             jump(jumpDistance);
         }
     }
@@ -223,12 +225,5 @@ public class PlayerControl extends Component {
     private void knockBack(Entity player) {
         move(400 * (int) (player.getScaleX()*-1));
         jump(600);
-    }
-
-    public void pullingMessage() {
-        if (getb("pushingBlock"))
-            getNotificationService().pushNotification("Ready to pull a block");
-        else
-            getNotificationService().pushNotification("Not ready to pull a block");
     }
 }

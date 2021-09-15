@@ -9,7 +9,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
 public class StoneControl extends Component {
-    private Entity player = getGameWorld().getEntitiesByType(com.cloudHopper.EntityType.PLAYER).get(0);
+    private final Entity player = getGameWorld().getEntitiesByType(com.cloudHopper.EntityType.PLAYER).get(0);
     private PhysicsComponent physics;
     private double stoneMovementSpeed = geti("stoneMovementSpeed");
 

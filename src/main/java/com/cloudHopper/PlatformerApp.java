@@ -72,7 +72,6 @@ public class PlatformerApp extends GameApplication {
             {
                 set("pushingBlock", true);
             }
-            player.getComponent(PlayerControl.class).pullingMessage();
             player.getComponent(PlayerControl.class).moveBlock();
         });
     }
