@@ -130,7 +130,7 @@ public class EnemyAIComponent extends Component {
     };
 
     private void jump() {
-        Integer facing = 1;
+        int facing = 1;
         if (entity.getX()<player.getX()) {
             facing *= -1;
         }

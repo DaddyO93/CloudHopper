@@ -1774,10 +1774,10 @@
                  "visible":true,
                  "width":9,
                  "x":11186.5,
-                 "y":973.8335
+                 "y":973.833
                 }, 
                 {
-                 "height":48.3329999999999,
+                 "height":48.333,
                  "id":256,
                  "name":"wall",
                  "rotation":0,
@@ -1785,7 +1785,7 @@
                  "visible":true,
                  "width":9,
                  "x":11906.5,
-                 "y":1034.8335
+                 "y":1034.83
                 }, 
                 {
                  "height":7,
@@ -1894,6 +1894,103 @@
                  "width":0,
                  "x":11107,
                  "y":894
+                }, 
+                {
+                 "height":63,
+                 "id":268,
+                 "name":"button",
+                 "properties":[
+                        {
+                         "name":"buttonNumber",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"pressed",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"button",
+                 "visible":true,
+                 "width":64,
+                 "x":227,
+                 "y":1023.5
+                }, 
+                {
+                 "height":0,
+                 "id":269,
+                 "name":"block",
+                 "point":true,
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":0,
+                 "x":602,
+                 "y":1018
+                }, 
+                {
+                 "height":63,
+                 "id":270,
+                 "name":"button",
+                 "properties":[
+                        {
+                         "name":"buttonNumber",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"pressed",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"button",
+                 "visible":true,
+                 "width":64,
+                 "x":350,
+                 "y":1026.5
+                }, 
+                {
+                 "height":63,
+                 "id":271,
+                 "name":"button",
+                 "properties":[
+                        {
+                         "name":"buttonNumber",
+                         "type":"int",
+                         "value":3
+                        }],
+                 "rotation":0,
+                 "type":"button",
+                 "visible":true,
+                 "width":64,
+                 "x":463,
+                 "y":1023.5
+                }, 
+                {
+                 "height":0,
+                 "id":272,
+                 "name":"block",
+                 "point":true,
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":0,
+                 "x":484,
+                 "y":617
+                }, 
+                {
+                 "height":0,
+                 "id":273,
+                 "name":"block",
+                 "point":true,
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":0,
+                 "x":51,
+                 "y":1024
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1902,7 +1999,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":268,
+ "nextobjectid":274,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.1",
