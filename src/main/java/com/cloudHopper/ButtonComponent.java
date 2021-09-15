@@ -52,6 +52,12 @@ public class ButtonComponent extends Component {
         @Override
         public void onEntering() {
             entity.getProperties().setValue("pressed", true);
+            ButtonPuzzle.puzzleTest(entity);
+
+            if (!blockDispensed) {
+                spawn("block", new Point2D(11100, 64));
+                blockDispensed = true;
+            }
         }
 
         @Override
@@ -59,14 +65,9 @@ public class ButtonComponent extends Component {
             if (block != null) {
                 if (texture.getAnimationChannel() != activeButton)
                     texture.loopAnimationChannel(activeButton);
-                if (!blockDispensed) {
-                    spawn("block", new Point2D(11100, 64));
-                    blockDispensed = true;
-                }
 
                 if (!entity.isColliding(block)) {
                     state.changeState(INACTIVE);
-                    blockDispensed = false;
                 }
             }
         }
@@ -74,18 +75,22 @@ public class ButtonComponent extends Component {
 
     private final EntityState INACTIVE = new EntityState("INACTIVE") {
         @Override
+        public void onEntering() {
+            blockDispensed = false;
+            block = null;
+            entity.getProperties().setValue("pressed", false);
+            ButtonPuzzle.puzzleTest(entity);
+        }
+
+        @Override
         public void onUpdate(double tpf) {
             if (texture.getAnimationChannel() != inactiveButton)
                 texture.loopAnimationChannel(inactiveButton);
-            block = null;
-            entity.getProperties().setValue("pressed", false);
-
         }
     };
 
     public void activateButton() {
         state.changeState(ACTIVE);
-         ButtonPuzzle.puzzleTest(entity);
 //        puzzleTest();
     }
 

@@ -34,7 +34,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder()
                 .view(new ScrollingBackgroundView(image("z-1.png"), getAppWidth(), geti("maxY"),
                         Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.0002)+1))
+                        (geti("playerMovementSpeed")*.0006)))
                 .zIndex(-1)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
@@ -45,7 +45,7 @@ public class GameEntityFactory implements EntityFactory {
         return entityBuilder()
                 .view(new ScrollingBackgroundView(image("z-2.png"), getAppWidth(), geti("maxY"),
                         Orientation.HORIZONTAL,
-                        (geti("playerMovementSpeed")*.00008)+1))
+                        (geti("playerMovementSpeed")*.0004)))
                 .zIndex(-2)
                 .with(new IrremovableComponent())
                 .buildAndAttach();
