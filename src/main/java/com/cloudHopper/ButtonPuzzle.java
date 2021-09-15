@@ -11,7 +11,6 @@ public class ButtonPuzzle extends Component {
     private boolean button5 = false;
 
     public static void puzzleTest(Entity button) {
-        System.out.println(button.getProperties().getBoolean("pressed") + " button#: " + button.getProperties().getInt("buttonNumber"));
         if (button.getProperties().getInt("buttonNumber") == 1 && button.getProperties().getBoolean("pressed")) {
             button1 = true;
         } else if (button.getProperties().getInt("buttonNumber") == 1 && !button.getProperties().getBoolean("pressed")) {
@@ -26,7 +25,7 @@ public class ButtonPuzzle extends Component {
 
         if (button1 && button2) {
             System.out.println("Success!");
-        } else if (!button1 && !button2){
+        } else if (!button1 || !button2){
             System.out.println("Fail!");
         }
     }
