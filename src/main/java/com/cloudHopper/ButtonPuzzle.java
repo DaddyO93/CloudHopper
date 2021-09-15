@@ -25,7 +25,7 @@ public class ButtonPuzzle extends Component {
 
         if (button1 && button2) {
             System.out.println("Success!");
-        } else if (!button1 || !button2){
+        } else{
             System.out.println("Fail!");
         }
     }
