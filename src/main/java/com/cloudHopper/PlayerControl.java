@@ -151,23 +151,19 @@ public class PlayerControl extends Component {
 
     private final EntityState PULLING = new EntityState("PULLING") {
         @Override
-        public void onEntering() {
-            facing = entity.getScaleX();
-        }
-
-        @Override
         public void onUpdate(double tpf) {
-            if (touchingBlock != null && getb("pushingBlock") && entity.distanceBBox(touchingBlock) < 10) {
-                if (touchingBlock.getY() < entity.getY())
-                    touchingBlock.translateX(20);
-                entity.setScaleX(facing);
-                movementSpeed = 120;
-                double pushingSpeed = entity.getComponent(PhysicsComponent.class).getVelocityX();
-                touchingBlock.getComponent(BlockControl.class).moveBlock(pushingSpeed);
-            } else if (touchingBlock != null && entity.distanceBBox(touchingBlock) > 10) {
-                state.changeState(NORMAL);
-            }
-            if (!getb("pushingBlock")) state.changeState(NORMAL);
+            if (touchingBlock != null && getb("pushingBlock")) {
+                determineFacing();
+                if (entity.distanceBBox(touchingBlock) < 10) {
+                    if (touchingBlock.getY() < entity.getY())
+                        touchingBlock.translateX(20);
+                    entity.setScaleX(facing);
+                    movementSpeed = 120;
+                    double pushingSpeed = entity.getComponent(PhysicsComponent.class).getVelocityX();
+                    touchingBlock.getComponent(BlockControl.class).moveBlock(pushingSpeed);
+                } else
+                    state.changeState(NORMAL);
+            } else state.changeState(NORMAL);
         }
     };
 
@@ -190,7 +186,8 @@ public class PlayerControl extends Component {
     }
 
     public void jumpTest() {
-        if (!physics.isMovingY() && (touchingBlock != null && entity.isColliding(touchingBlock))){
+        if (!physics.isMovingY()){
+            changeToNormalState();
             jump(jumpDistance);
         }
     }
@@ -206,6 +203,16 @@ public class PlayerControl extends Component {
         }
     }
 
+    private void determineFacing () {
+        if (touchingBlock != null) {
+            if (entity.getX() < touchingBlock.getX())
+                facing = 1.0;
+            else {
+                facing = -1.0;
+            }
+        }
+    }
+
     public void moveBlock() {
         state.changeState(PULLING);
     }
@@ -218,8 +225,12 @@ public class PlayerControl extends Component {
         player.getComponent(PhysicsComponent.class).overwritePosition(startPosition);
     }
 
-    public void invulnerable() {
+    public void changeToInvulnerableState() {
         state.changeState(INVULNERABLE);
+    }
+
+    public void changeToNormalState() {
+        state.changeState(NORMAL);
     }
 
     private void knockBack(Entity player) {

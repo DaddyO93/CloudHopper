@@ -8,7 +8,6 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
-import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -104,7 +103,7 @@ public class PlatformerApp extends GameApplication {
 
         onCollisionBegin(EntityType.ENEMY, EntityType.PLAYER, (enemy, player) -> {
             HeartControl.takeDamage();
-            player.getComponent(PlayerControl.class).invulnerable();
+            player.getComponent(PlayerControl.class).changeToInvulnerableState();
         });
         onCollisionBegin(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
             enemy.getComponent(EnemyAIComponent.class).directionChange();
